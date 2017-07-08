@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage{parskip}
 \usepackage[slantedGreek]{mathpazo}
 \usepackage{amsmath,amssymb,amsthm,amsfonts}
@@ -148,30 +148,56 @@ Our main contribution in this paper is a Bayesian interpretation of the square-r
 
 \section{Bayesian $\sqrt{\text{Lasso}}$ }
 
-Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text{Lasso}}$ in \eqref{eq:sqlasso}. For simplicity, we show here the equations for the sparse Gaussian means model where $\X$ is an identity matrix of suitable dimensions. Since the likelihood-prior decompsoition of \eqref{eq:sqlasso} yield a Laplace density for both the observation and the prior model, we use a Gaussian scale mixture representation of Laplace to write the Bayesian hierarchy. 
+\subsection{Hierarchical Model}
+Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text{Lasso}}$ in \eqref{eq:sqlasso}. Since the likelihood-prior decompsoition of \eqref{eq:sqlasso} yield a Laplace density for both the observation and the prior model, we use a Gaussian scale mixture representation of Laplace to write the Bayesian hierarchy. 
 
 The key step in the Bayesian hierarchy for $\sqrt{\text{Lasso}}$ follows from the well-known identity due to \citet{levy1940certains} given by:
 \begin{equation}
   \int_{0}^{\infty} \frac{a}{(2 \pi)^{1/2} t^{3/2}} \exp\{-{a^2}/({2 t})\} \exp\{-\lambda t\} dt = \exp\{-a (2 \lambda)^{1/2} \} \;.\label{eq:levy}
 \end{equation}
 
-For deriving the full hierarchical model for $\sqrt{\text{Lasso}}$, we use $a = 1$, and $2\lambda = \half \sum_{i=1}^{p} (y_i - \beta_i)^2$ to get 
+For deriving the full hierarchical model for $\sqrt{\text{Lasso}}$, we use $a = 1$, and $2\lambda = (\y - \X \bbeta)^{\T}(\y - \X \bbeta)$ to get 
 \begin{equation}
-\exp \left[-\{\half \sum_{i=1}^{p} (y_i - \beta_i)^2)\}^{1/2} \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \e^{-{1}/({2 t})} \e^{- \quart \sum_{i=1}^{p} (y_i - \beta_i)^2 t} dt
+\exp \left[-\{(\y - \X \bbeta)^{\T}(\y - \X \bbeta) \}^{1/2} \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \e^{-{1}/({2 t})} \e^{- \half (\y - \X \bbeta)^{\T}(\y - \X \bbeta) t} dt
 \end{equation}
-To complete the hierarchy we use the normal scale mixture of Laplace prior on $\bbeta$ as follows:
+To complete the hierarchy we use the normal scale mixture of Laplace prior on $\bbeta$ \citep{andrews_scale_1974} as follows:
 \[
-\pi(\beta_i) = e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi} \lambda_i} \e^{-\beta_i^2/(2\lambda_i^2)} \; \frac{\tau^2}{2} \e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2 \quad i = 1, \ldots, p.
+\pi(\beta_i) \propto e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi} \lambda_i} \e^{-\beta_i^2/(2\lambda_i^2)} \; \frac{\tau^2}{2} \e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2 \quad i = 1, \ldots, p.
 \]
 The hyper-parameter $\tau$ serves the role of the tuning parameter in square-root Lasso. We can either estimate it via an empirical Bayes marginal maximum likelihood or use a Gamma hyperprior on $\tau$ to learn via full Bayes. 
 \beq
 \pi(\tau^2) = \frac{\delta^r}{\Gamma(r)} (\tau^2)^{r-1} e^{-\delta \tau^2}, \; \tau^2 > 0, \; (r >0, \delta >0).
 \eeq
-The joint distribution of $y_i$ and all the hyperparameters in the model is then given by:
+Under the Gamma hyper-prior, the joint distribution of $y_i$ and all the hyperparameters in the model is :
 \begin{multline}
 f(\y, \bbeta, t, \blambda, \tau^2 \mid \r, \delta) \propto 
-\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \quart \sum_{i=1}^{p} (y_i - \beta_i)^2 t \right\} \\
-\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2}
+\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \half (\y - \X \bbeta)^{\T}(\y - \X \bbeta) t \right\} \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint}
+\end{multline}
+
+The joint distribution in \eqref{eq:joint} provides the full hierarchical model for a Bayesian treatment. To maintain notational similarity, we first transform $t/2 = \sigma^{-2}$ and write the 
+reprametrized joint distribution as: 
+\begin{multline}
+f(\y, \bbeta, \sigma^2, \blambda, \tau^2 \mid \r, \delta) \propto 
+\frac{1}{\sqrt{\sigma^2}} \exp\{-{\sigma^2}/({4}) \} \exp \left\{- \half (\y - \X \bbeta)^{\T}(\y - \X \bbeta)/ \sigma^2 \right\} \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint}
+\end{multline}
+Hence the hierarchical representation of the full model is as follows:
+\begin{align}
+\y \mid \bbeta, \sigma^2 & \sim \NormRV(\X \bbeta, \sigma^2 \I) \\
+\bbeta & \sim \NormRV(\0, D_{\blambda}), \; D_{\blambda} = \text{Diag}(\lambda_1^2, \ldots, \lambda_p^2) \\
+\lambda_1^2, \ldots, \lambda_p^2 & \sim \prod_{j=1}^{p} \sim \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2}, \; \lambda_i^2 > 0, \\
+\tau^2, \sigma^2 & \sim (\tau^2)^{r-1} e^{-\delta \tau^2} \exp\{-{\sigma^2}/({4}) \}, \; \tau^2, \sigma^2 > 0. 
+\end{align}
+
+
+\subsection{Gibbs Sampler}
+
+For simplicity, we show here the equations for the sparse Gaussian means model where $\X$ is an identity matrix of suitable dimensions, rendering the joint distribution as:
+\begin{multline}
+f(\y, \bbeta, t, \blambda, \tau^2 \mid \r, \delta) \propto 
+\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \half \sum_{i=1}^{p}(y_i-\beta_i)^2 t \right\} \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint}
 \end{multline}
 
 The full conditional distributions of $\beta_i$ and $\tau$ are easy to derive: The full conditional of $\bbeta_i$ is multivariate normal and $\tau$ is Gamma, exploiting the conjugacy. The parameters $t$ and $\lambda_i^2$ follow inverse Gaussian distribution, where we assume the following parametric form of the inverse Gaussian density:
@@ -181,11 +207,12 @@ f(x \mid \lambda', \mu') = \sqrt{\frac{\lambda'}{2\pi}} x^{-3/2} \exp\left\{ - \
 
 The full conditional distributions needed for implementing a Gibbs sampler are:	
 \begin{align}
-\beta_i \mid y_i, \lambda_i, t & \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{2 + \lambda_i^2 t}, \frac{2 \lambda_i^2}{2 + t \lambda_i^2} \right), i = 1, \ldots, n, \\
-t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = \nicefrac{\sqrt{2}}{\sqrt{\sum_{i=1}^{p}(y_i - \beta_i)^2}}, \lambda' = 1 \right) \\
+\beta_i \mid y_i, \lambda_i, t & \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{1 + t \lambda_i^2}, \frac{\lambda_i^2}{1 + t \lambda_i^2} \right), i = 1, \ldots, n, \\
+t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = \nicefrac{1}{\sqrt{\sum_{i=1}^{p}(y_i - \beta_i)^2}}, \lambda' = 1 \right) \\
 \lambda_i^2 \mid \beta_i, \tau & \sim \text{Inv-Gauss}(\mu' = \abs{\frac{\beta_i}{\tau}}, \lambda' = \beta_i^2)\\
 \tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{p} \lambda_i^2/2)
 \end{align}
+
 
 \section{Simulation Study: Sparse Normal Means}
 \begin{figure}[!ht]%
