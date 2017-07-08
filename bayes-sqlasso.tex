@@ -5,6 +5,7 @@
 \usepackage[top=8pc,bottom=8pc,left=8pc,right=8pc]{geometry}
 %\usepackage{ntheorem}
 
+\usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{epstopdf}
@@ -47,10 +48,10 @@
 \usepackage[plain,noend]{algorithm2e}
 
 % For compressing some space: 
-\setlength{\textfloatsep}{10pt plus 1.0pt minus 2.0pt}
-\setlength{\floatsep}{12.0pt plus 2.0pt minus 5.0pt}
-\setlength{\intextsep}{12.0pt plus 2.0pt minus 5.0pt}
-\setlength{\belowcaptionskip}{-2pt}
+%\setlength{\textfloatsep}{10pt plus 1.0pt minus 2.0pt}
+%\setlength{\floatsep}{12.0pt plus 2.0pt minus 5.0pt}
+%\setlength{\intextsep}{12.0pt plus 2.0pt minus 5.0pt}
+%\setlength{\belowcaptionskip}{-2pt}
 
 %\setlength{\textheight}{9in}
 %\setlength{\textwidth}{6in}
@@ -65,9 +66,8 @@
 
 \usepackage{array}
 \include{math-commands}
-%\linespread{1.1}
+\linespread{1.1}
 
-\begin{document}
 
 %% The left and right page headers are defined here:
 \markboth{Bhadra, Datta, Polson, and Willard}{Bayesian $\sqrt{\text{Lasso}}$ }
@@ -75,13 +75,34 @@
 % Here are the title, author names and addresses
 \title{Bayesian $\sqrt{\text{Lasso}}$}
 
-\author{Anindya Bhadra  \footnote{{\em Address:} 250 N. University St., West Lafayette, IN 47907, email: bhadra@purdue.edu.} \\ Purdue University \\ Department of Statistics 
-\and Jyotishka Datta  \footnote{{\em Address:} Department of Mathematical Sciences, SCEN 309, 1 University of Arkansas, Fayetteville, AR, 72701, email: jd033@uark.edu.}\\ University of Arkansas \\ Department of Mathematical Sciences 
-\and Nicholas G. Polson \footnote{{\em Address:} 5807 S. Woodlawn Ave., Chicago, IL 60637, email: ngp@chicagobooth.edu.} \\ University of Chicago \\ Booth School of
-Business \and Brandon Willard \footnote{{\em Address:} 5807 S. Woodlawn Ave., Chicago, IL 60637, email: brandonwillard@gmail.com.} \\ University of Chicago \\ Booth School of
-Business}
-
+\author{
+  Anindya Bhadra\footnote{
+  {\em Address:} 250 N. University St., West Lafayette, IN 47907, 
+  email: bhadra@purdue.edu.} \\
+  Purdue University
+  \and Jyotishka Datta\footnote{
+  {\em Address:} SCEN 309, 1 University of Arkansas, Fayetteville, AR, 72701, 
+  email: jd033@uark.edu.}\\ 
+  University of Arkansas \\
+  \and Nicholas G. Polson \footnote{
+  {\em Address:} 5807 S. Woodlawn Ave., Chicago, IL 60637, 
+  email: ngp@chicagobooth.edu.}  \\
+  University of Chicago  \\
+  Booth School of Business
+  \and 
+  Brandon T. Willard\footnote{
+  {\em Address:} 5807 S. Woodlawn Ave., Chicago, IL 60637, 
+  email: bwillard@uchicago.edu.} \\
+  University of Chicago  \\
+  Booth School of Business
+}
+\date{\today}
+\singlespacing
+\begin{document}
 \maketitle
+%\baselineskip=15pt
+\onehalfspacing
+
 
 %\begin{abstract}
 %In this paper, we provide a new class of sparsity priors in the global-local scale mixture family that has a higher spike near the origin and heavier tails compared to the other priors. These new shrinkage priors have the advantage of a closed-form prior density and penalty term as well as analytical tractability of the marginal distributions. These priors also enjoy the optimality properties shared by the horseshoe prior \cite{carvalho2010horseshoe} and its sharpened version, the horseshoe+ prior \cite{bhadra2015horseshoe+}, both in theory and in applications. 
@@ -131,34 +152,39 @@ Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text
 
 The key step in the Bayesian hierarchy for $\sqrt{\text{Lasso}}$ follows from the well-known identity due to \citet{levy1940certains} given by:
 \begin{equation}
-  \int_{0}^{\infty} \frac{a}{(2 \pi)^{1/2} t^{3/2}} e^{-{a^2}/({2 t})} e^{-\lambda t} dt = e^{-a (2 \lambda)^{1/2} } \;.\label{eq:levy}
+  \int_{0}^{\infty} \frac{a}{(2 \pi)^{1/2} t^{3/2}} \exp\{-{a^2}/({2 t})\} \exp\{-\lambda t\} dt = \exp\{-a (2 \lambda)^{1/2} \} \;.\label{eq:levy}
 \end{equation}
 
-For deriving the full hierarchical model for $\sqrt{\text{Lasso}}$, we use $a = 1$, and $2\lambda = \half \sum_{i=1}^{n} (y_i - \beta_i)^2$ to get 
+For deriving the full hierarchical model for $\sqrt{\text{Lasso}}$, we use $a = 1$, and $2\lambda = \half \sum_{i=1}^{p} (y_i - \beta_i)^2$ to get 
 \begin{equation}
-\exp \left\{-\sqrt{\half \sum_{i=1}^{p} (y_i - \beta_i)^2)} \right\} = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} e^{-{1}/({2 t})} e^{- \quart \sum_{i=1}^{n} (y_i - \beta_i)^2 t} dt
+\exp \left[-\{\half \sum_{i=1}^{p} (y_i - \beta_i)^2)\}^{1/2} \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \e^{-{1}/({2 t})} \e^{- \quart \sum_{i=1}^{p} (y_i - \beta_i)^2 t} dt
 \end{equation}
 To complete the hierarchy we use the normal scale mixture of Laplace prior on $\bbeta$ as follows:
 \[
-\pi(\beta_i) = e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi \lambda_i^2}} e^{-\beta_i^2/(2\lambda_i^2)} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2 \quad i = 1, \ldots, n.
+\pi(\beta_i) = e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi} \lambda_i} \e^{-\beta_i^2/(2\lambda_i^2)} \; \frac{\tau^2}{2} \e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2 \quad i = 1, \ldots, p.
 \]
 The hyper-parameter $\tau$ serves the role of the tuning parameter in square-root Lasso. We can either estimate it via an empirical Bayes marginal maximum likelihood or use a Gamma hyperprior on $\tau$ to learn via full Bayes. 
 \beq
-\pi(\tau^2) = \frac{\delta^r}{\Gamma(r)} (\tau^2)^{r-1} e^{-\delta \tau^2}, \; \tau^2 > 0 (r >0, \delta >0)
+\pi(\tau^2) = \frac{\delta^r}{\Gamma(r)} (\tau^2)^{r-1} e^{-\delta \tau^2}, \; \tau^2 > 0, \; (r >0, \delta >0).
 \eeq
 The joint distribution of $y_i$ and all the hyperparameters in the model is then given by:
 \begin{multline}
 f(\y, \bbeta, t, \blambda, \tau^2 \mid \r, \delta) \propto 
-\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \quart \sum_{i=1}^{n} (y_i - \beta_i)^2 t \right\} \\
-\prod_{i=1}^{n} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2}
+\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \quart \sum_{i=1}^{p} (y_i - \beta_i)^2 t \right\} \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2}
 \end{multline}
 
-The full conditional distributions needed for implementing a Gibbs sampler are easy to derive:	
+The full conditional distributions of $\beta_i$ and $\tau$ are easy to derive: The full conditional of $\bbeta_i$ is multivariate normal and $\tau$ is Gamma, exploiting the conjugacy. The parameters $t$ and $\lambda_i^2$ follow inverse Gaussian distribution, where we assume the following parametric form of the inverse Gaussian density:
+\[
+f(x \mid \lambda', \mu') = \sqrt{\frac{\lambda'}{2\pi}} x^{-3/2} \exp\left\{ - \frac{\lambda'(x-\mu')^2}{2(\mu')^2 x^2} \right \}, \quad x > 0 
+\]
+
+The full conditional distributions needed for implementing a Gibbs sampler are:	
 \begin{align}
 \beta_i \mid y_i, \lambda_i, t & \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{2 + \lambda_i^2 t}, \frac{2 \lambda_i^2}{2 + t \lambda_i^2} \right), i = 1, \ldots, n, \\
-t \mid \y, \bbeta & \sim \text{Inverse-Gaussian} \left(\frac{\sqrt{2}}{\sqrt{\sum_{i=1}^{n}(y_i - \beta_i)^2}}, 1 \right) \\
-\lambda_i^2 \mid \beta_i, \tau & \sim \text{Inverse-Gaussian}(\abs{\frac{\beta_i}{\tau}}, \beta_i^2)\\
-\tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{n} \lambda_i^2/2)
+t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = \nicefrac{\sqrt{2}}{\sqrt{\sum_{i=1}^{p}(y_i - \beta_i)^2}}, \lambda' = 1 \right) \\
+\lambda_i^2 \mid \beta_i, \tau & \sim \text{Inv-Gauss}(\mu' = \abs{\frac{\beta_i}{\tau}}, \lambda' = \beta_i^2)\\
+\tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{p} \lambda_i^2/2)
 \end{align}
 
 \section{Simulation Study: Sparse Normal Means}
