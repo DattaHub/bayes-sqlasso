@@ -127,14 +127,16 @@ Our main contribution in this paper is a Bayesian interpretation of the square-r
 
 \section{Bayesian $\sqrt{\text{Lasso}}$ }
 
-The Bayesian hierarchy correponding to the $\sqrt{\text{Lasso}}$ follows from the well-known identity due to \citet{levy1940certains} given by:
+Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text{Lasso}}$ in \eqref{eq:sqlasso}. For simplicity, we show here the equations for the sparse Gaussian means model where $\X$ is an identity matrix of suitable dimensions. Since the likelihood-prior decompsoition of \eqref{eq:sqlasso} yield a Laplace density for both the observation and the prior model, we use a Gaussian scale mixture representation of Laplace to write the Bayesian hierarchy. 
+
+The key step in the Bayesian hierarchy for $\sqrt{\text{Lasso}}$ follows from the well-known identity due to \citet{levy1940certains} given by:
 \begin{equation}
   \int_{0}^{\infty} \frac{a}{(2 \pi)^{1/2} t^{3/2}} e^{-{a^2}/({2 t})} e^{-\lambda t} dt = e^{-a (2 \lambda)^{1/2} } \;.\label{eq:levy}
 \end{equation}
 
 For deriving the full hierarchical model for $\sqrt{\text{Lasso}}$, we use $a = 1$, and $2\lambda = \half \sum_{i=1}^{n} (y_i - \beta_i)^2$ to get 
 \begin{equation}
-\exp \left\{-\sqrt{\half \sum_{i=1}^{n} (y_i - \beta_i)^2)} \right\} = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} e^{-{1}/({2 t})} e^{- \quart \sum_{i=1}^{n} (y_i - \beta_i)^2 t} dt
+\exp \left\{-\sqrt{\half \sum_{i=1}^{p} (y_i - \beta_i)^2)} \right\} = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} e^{-{1}/({2 t})} e^{- \quart \sum_{i=1}^{n} (y_i - \beta_i)^2 t} dt
 \end{equation}
 To complete the hierarchy we use the normal scale mixture of Laplace prior on $\bbeta$ as follows:
 \[
@@ -148,14 +150,15 @@ The joint distribution of $y_i$ and all the hyperparameters in the model is then
 \begin{multline}
 f(\y, \bbeta, t, \blambda, \tau^2 \mid \r, \delta) \propto 
 \frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \quart \sum_{i=1}^{n} (y_i - \beta_i)^2 t \right\} \\
-{(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2}
+\prod_{i=1}^{n} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2}
 \end{multline}
-The full conditional distributions needed for implementing a Gibbs sampler are easy to derive. 
+
+The full conditional distributions needed for implementing a Gibbs sampler are easy to derive:	
 \begin{align}
 \beta_i \mid y_i, \lambda_i, t & \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{2 + \lambda_i^2 t}, \frac{2 \lambda_i^2}{2 + t \lambda_i^2} \right), i = 1, \ldots, n, \\
-t \mid \y, \bbeta & \sim \text{Inverse-Gaussian} \left(\frac{2}{\sqrt{\sum_{i=1}^{n}(y_i - \beta_i)^2}}, 1 \right) \\
-\lambda_i^2 \mid \beta_i, \tau & \sim \text{Inverse-Gaussian}(\beta_i / \tau, \beta_i^2)\\
-\tau \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{n} \lambda_i^2/2)
+t \mid \y, \bbeta & \sim \text{Inverse-Gaussian} \left(\frac{\sqrt{2}}{\sqrt{\sum_{i=1}^{n}(y_i - \beta_i)^2}}, 1 \right) \\
+\lambda_i^2 \mid \beta_i, \tau & \sim \text{Inverse-Gaussian}(\abs{\frac{\beta_i}{\tau}}, \beta_i^2)\\
+\tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{n} \lambda_i^2/2)
 \end{align}
 
 \section{Simulation Study: Sparse Normal Means}
