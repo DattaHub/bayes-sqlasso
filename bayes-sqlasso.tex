@@ -193,41 +193,46 @@ Hence the hierarchical representation of the full model is as follows:
 
 \subsection{Gibbs Sampler}
 
-For simplicity, we show here the equations for the sparse Gaussian means model where $\X$ is an identity matrix of suitable dimensions, rendering the joint distribution as:
+Let $ D_{\blambda} = \text{Diag}(\lambda_1^2, \ldots, \lambda_p^2)$ be the diagonal matrix of local shrinkage parameters. The joint distribution can be re-written as follows after collecting the terms for $\bbeta$: 
 \begin{multline}
 f(\y, \bbeta, t, \blambda, \tau^2 \mid \r, \delta) \propto 
-\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left\{- \half \sum_{i=1}^{p}(y_i-\beta_i)^2 t \right\} \\
-\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint}
+\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left[- \half \{ \bbeta^\T(\X^\T \X t + \D_{\blambda}^{-1})\bbeta - 2 \bbeta^\T \X^\T \y t \}\right] \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint-beta}
 \end{multline}
 
-The full conditional distributions of $\beta_i$ and $\tau$ are easy to derive: The full conditional of $\bbeta_i$ is multivariate normal and $\tau$ is Gamma, exploiting the conjugacy. The parameters $t$ and $\lambda_i^2$ follow inverse Gaussian distribution, where we assume the following parametric form of the inverse Gaussian density:
+The full conditional distributions of $\bbeta$ and $\tau$ are easy to derive: The full conditional of $\bbeta$ is multivariate normal and $\tau$ is Gamma, exploiting the conjugacy. The parameters $t$ and $\lambda_i^2$ follow inverse Gaussian distribution, where we assume the following parametric form of the inverse Gaussian density:
 \[
 f(x \mid \lambda', \mu') = \sqrt{\frac{\lambda'}{2\pi}} x^{-3/2} \exp\left\{ - \frac{\lambda'(x-\mu')^2}{2(\mu')^2 x^2} \right \}, \quad x > 0 
 \]
 
 The full conditional distributions needed for implementing a Gibbs sampler are:	
 \begin{align}
-\beta_i \mid y_i, \lambda_i, t & \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{1 + t \lambda_i^2}, \frac{\lambda_i^2}{1 + t \lambda_i^2} \right), i = 1, \ldots, n, \\
-t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = \nicefrac{1}{\sqrt{\sum_{i=1}^{p}(y_i - \beta_i)^2}}, \lambda' = 1 \right) \\
+\bbeta \mid \y, \blambda, t & \sim \NormRV \left( \A^{-1}\X^\T \y t , \A^{-1} \right), i = 1, \ldots, p, \\
+\text{ where } \A & = \X^\T \X t + \D_{\blambda}^{-1} \\
+t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = \nicefrac{1}{\norm{\y-\X\bbeta}}, \lambda' = 1 \right) \\
 \lambda_i^2 \mid \beta_i, \tau & \sim \text{Inv-Gauss}(\mu' = \abs{\frac{\beta_i}{\tau}}, \lambda' = \beta_i^2)\\
 \tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{p} \lambda_i^2/2)
 \end{align}
 
+A special case of the linear regression model is the sparse normal means model: $y_i = \beta_i + \epsilon_i$, $\epsilon_i \sim \NormRV(0,\sigma^2)$, which results when the design matrix is equal to the identity matrix of appropriate dimension. The Gibbs sampler for the normal means model is identical to that for the linear regression, but faster as the full conditional distribution of $\beta_i$'s are univariate Gaussian, and hence more efficient than the multivariate sampling. 
+\beq
+\beta_i \mid y_i, \lambda_i, t \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{1 + t \lambda_i^2}, \frac{\lambda_i^2}{1 + t \lambda_i^2} \right), i = 1, \ldots, p.
+\eeq
 
-\section{Simulation Study: Sparse Normal Means}
-\begin{figure}[!ht]%
-\centering
-\includegraphics[width=\columnwidth]{art/sparse-means-sql-1}%
-\caption{Comparison of posterior mean estimates for two different sparse normal means, $\beta_i \sim 0.8 \delta_{\{7\}}+0.1\delta_{\{3\}}+0.1\delta_{\{0\}}$ and $\beta_i \sim 0.9 \delta_{\{7\}}+0.1\delta_{\{0\}}$ under the Bayesian $\sqrt{\text{Lasso}}$ . }%
-\label{fig:sql-sim-1}%
-\end{figure}
-
-The Bayesian square-root Lasso method described above has sharpened ability to detect signals in a sparse regime. We demonstrate the sparse signal recovery of the Bayesian $\sqrt{\text{Lasso}}$ through a simulation study for estimating a sparse normal mean vector for two different choices of $\bbeta$: 
-\ben
-\item $\bbeta = (\underbrace{7,\ldots,7}_{q_n=10},\overbrace{0,\ldots,0}^{n-q_n = 90})$ and 
-\item $\bbeta = (\underbrace{7,\ldots,7}_{q_{n}=10},\underbrace{3,\ldots,3}_{r_n=10}\overbrace{0,\ldots,0}^{n-q_n-r_n = 80})$.
-\een
-We generate observations from a Gaussian model $(y_i \mid \beta_i) \sim \NormRV(\beta_i, \sigma^2)$ for $\sigma^2 = 1$ and $\sigma^2 = \half$. Figure \ref{fig:sql-sim-1} shows the posterior mean estimates for the four possible scenarios described above. 
+%\section{Simulation Study: Sparse Normal Means}
+%\begin{figure}[!ht]%
+%\centering
+%\includegraphics[width=\columnwidth]{art/sparse-means-sql-1}%
+%\caption{Comparison of posterior mean estimates for two different sparse normal means, $\beta_i \sim 0.8 \delta_{\{7\}}+0.1\delta_{\{3\}}+0.1\delta_{\{0\}}$ and $\beta_i \sim 0.9 \delta_{\{7\}}+0.1\delta_{\{0\}}$ under the Bayesian $\sqrt{\text{Lasso}}$ . }%
+%\label{fig:sql-sim-1}%
+%\end{figure}
+%
+%The Bayesian square-root Lasso method described above has sharpened ability to detect signals in a sparse regime. We demonstrate the sparse signal recovery of the Bayesian $\sqrt{\text{Lasso}}$ through a simulation study for estimating a sparse normal mean vector for two different choices of $\bbeta$: 
+%\ben
+%\item $\bbeta = (\underbrace{7,\ldots,7}_{q_n=10},\overbrace{0,\ldots,0}^{n-q_n = 90})$ and 
+%\item $\bbeta = (\underbrace{7,\ldots,7}_{q_{n}=10},\underbrace{3,\ldots,3}_{r_n=10}\overbrace{0,\ldots,0}^{n-q_n-r_n = 80})$.
+%\een
+%We generate observations from a Gaussian model $(y_i \mid \beta_i) \sim \NormRV(\beta_i, \sigma^2)$ for $\sigma^2 = 1$ and $\sigma^2 = \half$. Figure \ref{fig:sql-sim-1} shows the posterior mean estimates for the four possible scenarios described above. 
 
 %\section{Theoretical Results}
 %
