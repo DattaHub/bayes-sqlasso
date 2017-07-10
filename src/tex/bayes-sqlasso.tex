@@ -164,7 +164,7 @@ To complete the hierarchy we use the normal scale mixture of Laplace prior on $\
 \[
 \pi(\beta_i) \propto e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi} \lambda_i} \e^{-\beta_i^2/(2\lambda_i^2)} \; \frac{\tau^2}{2} \e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2 \quad i = 1, \ldots, p.
 \]
-The hyper-parameter $\tau$ serves the role of the tuning parameter in square-root Lasso. We can either estimate it via an empirical Bayes marginal maximum likelihood or use a Gamma hyperprior on $\tau$ to learn via full Bayes. 
+The hyper-parameter $\tau$ serves the role of the tuning parameter in square-root Lasso. There are several different ways of treating $\tau$. We can treat it as a fixed tuning parameter and use pre-specified values on a grid to choose one.  We can also either estimate $\tau$ via an empirical Bayes marginal maximum likelihood or use a suitable hyperprior on $\tau$ to learn via full Bayes. For the Bayesian Lasso, \cite{park_bayesian_2008} used a Gamma hyper-prior to make the tuning parameter a part of the Gibbs sampler. 
 \beq
 \pi(\tau^2) = \frac{\delta^r}{\Gamma(r)} (\tau^2)^{r-1} e^{-\delta \tau^2}, \; \tau^2 > 0, \; (r >0, \delta >0).
 \eeq
@@ -211,7 +211,7 @@ The full conditional distributions needed for implementing a Gibbs sampler are:
 \text{ where } \A & = \X^\T \X t + \D_{\blambda}^{-1} \\
 t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = \nicefrac{1}{\norm{\y-\X\bbeta}}, \lambda' = 1 \right) \\
 \lambda_i^2 \mid \beta_i, \tau & \sim \text{Inv-Gauss}(\mu' = \abs{\frac{\beta_i}{\tau}}, \lambda' = \beta_i^2)\\
-\tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(n + r, \delta + \sum_{i=1}^{p} \lambda_i^2/2)
+\tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(p + r, \delta + \sum_{i=1}^{p} \lambda_i^2/2)
 \end{align}
 
 A special case of the linear regression model is the sparse normal means model: $y_i = \beta_i + \epsilon_i$, $\epsilon_i \sim \NormRV(0,\sigma^2)$, which results when the design matrix is equal to the identity matrix of appropriate dimension. The Gibbs sampler for the normal means model is identical to that for the linear regression, but faster as the full conditional distribution of $\beta_i$'s are univariate Gaussian, and hence more efficient than the multivariate sampling. 
