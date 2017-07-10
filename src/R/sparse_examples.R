@@ -28,6 +28,19 @@ plot(Y)
 lines(ans2$ThetaHat)
 points(apply(ans2$ThetaSave,2,Mode),col="red",pch=15)
 
+## Posterior for a range of deterministic values 
+ 
+y <- seq(-5, 5, 0.05)
+
+ans3 <- bayes.sqrt.lasso(Y=y, method.tau ="fixed", burn = 1000, nmc = 5000)
+plot(y, apply(ans3$ThetaSave,2,mean), type="l",col="blue",ylab = expression(hat(theta)))
+lines(y, apply(ans3$ThetaSave,2,median), type="l",col="red")
+lines(y, HS.post.mean(y, tau = 0.5, Sigma2 = 1),col="magenta")
+lines(y,y)
+legend("topleft",c("SQL-Mean","SQL-Median","Horseshoe Mean","Y"),
+       col=c("blue","red","magenta","black"),lty=1)
+dev.copy2pdf(file="shrinkage_profile.pdf")
+
 # 
 # 
 # ##############################
