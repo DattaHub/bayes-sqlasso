@@ -15,9 +15,16 @@ knitr::opts_chunk$set(cache = TRUE)
 We consider a 2-dimensional linear regression $Y = X \beta + \epsilon$ where $\beta = (20,20)$ and $X$ is an identity matrix. 
 ```{r, eval = TRUE}
 set.seed(123)
-X = matrix(c(1,0,0,1),ncol=2,byrow=T)
-beta = c(20,20)
-(y = X%*%beta + rnorm(2))
+
+X = matrix(rep(c(1, 0, 0, 1), 1),
+           ncol=2, 
+           byrow=T)
+
+beta = c(20, 20)
+
+y_hat = X %*% beta
+
+(y = drop(y_hat + rnorm(nrow(X))))
 ```
 
 We will use two different methods: horseshoe using the `horseshoe` R package and a Bayesian version of scaled / square-root Lasso. 
@@ -26,7 +33,7 @@ We will use two different methods: horseshoe using the `horseshoe` R package and
 
 ```{r}
 library(horseshoe)
-res <- horseshoe(y, X, method.tau = "truncatedCauchy",
+res <- horseshoe(y, X, method.tau = "halfCauchy",
                  method.sigma = "Jeffreys",
                  burn = 1000, nmc = 5000, alpha = 0.05)
 (postmean_HS <- res$BetaHat)
@@ -52,9 +59,19 @@ theta.smpls.hs <- t(res$BetaSamples)
 colnames(theta.smpls.hs) = c("theta1", "theta2")
 
 hs.2d.density<- ggplot(as.data.frame(theta.smpls.hs), aes(theta1, theta2)) +
-  geom_density2d()+stat_density2d(aes(fill = ..level..), geom="polygon")+
-  xlab(expression(theta[1]))+ylab(expression(theta[2]))+ggtitle("Horseshoe Regression")
+  geom_density2d() + stat_density2d(aes(fill = ..level..), geom="polygon") +
+  xlab(expression(theta[1])) + ylab(expression(theta[2])) + ggtitle("Horseshoe Regression")
+
 print(hs.2d.density)
+```
+
+We can also produce a marginal view of the two $\theta$ values.
+```{r}
+library(dplyr)
+
+theta_smpls_hs_melt = melt(theta.smpls.hs)
+theta_smpls_hs_melt = theta_smpls_hs_melt %>% filter(value > -10 & value < 30)
+ggplot(theta_smpls_hs_melt, aes(value)) + geom_histogram()
 ```
 
 The $\tau, \sigma^2$ samples for the truncated Cauchy and Jeffrey's prior:
