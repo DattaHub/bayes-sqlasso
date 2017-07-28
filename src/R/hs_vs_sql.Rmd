@@ -15,9 +15,16 @@ knitr::opts_chunk$set(cache = TRUE)
 We consider a 2-dimensional linear regression $Y = X \beta + \epsilon$ where $\beta = (20,20)$ and $X$ is an identity matrix. 
 ```{r, eval = TRUE}
 set.seed(123)
-X = matrix(c(1,0,0,1),ncol=2,byrow=T)
-beta = c(20,20)
-(y = X%*%beta + rnorm(2))
+
+X = matrix(rep(c(1, 0, 0, 1), 1),
+           ncol=2, 
+           byrow=T)
+
+beta = c(20, 20)
+
+y_hat = X %*% beta
+
+(y = drop(y_hat + rnorm(nrow(X))))
 ```
 
 We will use two different methods: horseshoe using the `horseshoe` R package and a Bayesian version of scaled / square-root Lasso. 
@@ -26,7 +33,7 @@ We will use two different methods: horseshoe using the `horseshoe` R package and
 
 ```{r}
 library(horseshoe)
-res <- horseshoe(y, X, method.tau = "truncatedCauchy",
+res <- horseshoe(y, X, method.tau = "halfCauchy",
                  method.sigma = "Jeffreys",
                  burn = 1000, nmc = 5000, alpha = 0.05)
 (postmean_HS <- res$BetaHat)
@@ -43,6 +50,137 @@ Mode <- function(x) {
 (map_HS <- apply(res$BetaSamples,1,Mode))
 ```
 
+```{r}
+
+#'
+#'  Version of HS sampler with relative tau scaling.
+#'
+horseshoe_rel <- function(y, X, 
+                          method.tau = c("relative", "fixed", "truncatedCauchy", "halfCauchy"), 
+                          tau = 1, 
+                          method.sigma = c("fixed", "Jeffreys"), 
+                          Sigma2 = 1, 
+                          burn = 1000, nmc = 5000, thin = 1, alpha = 0.05)
+{
+    method.tau = match.arg(method.tau)
+    method.sigma = match.arg(method.sigma)
+    ptm = proc.time()
+    N = burn + nmc
+    effsamp = (N - burn)/thin
+    n = nrow(X)
+    p = ncol(X)
+    Beta = rep(0, p)
+    lambda = rep(1, p)
+    sigma_sq = Sigma2
+    betaout = matrix(0, p, effsamp)
+    tauout = rep(0, effsamp)
+    sigmaSqout = rep(0, effsamp)
+    if (p > n)
+        algo = 1
+    else algo = 2
+    I_n = diag(n)
+    l0 = rep(0, p)
+    l1 = rep(1, n)
+    l2 = rep(1, p)
+    if (algo == 2) {
+        Q_star = t(X) %*% X
+    }
+    for (i in 1:N) {
+        if (algo == 1) {
+            lambda_star = tau * lambda
+            U = as.numeric(lambda_star^2) * t(X)
+            u = stats::rnorm(l2, l0, lambda_star)
+            v = X %*% u + stats::rnorm(n)
+            v_star = solve((X %*% U + I_n), ((y/sqrt(sigma_sq)) -
+                v))
+            Beta = sqrt(sigma_sq) * (u + U %*% v_star)
+        }
+        else if (algo == 2) {
+            lambda_star = tau * lambda
+            L = chol((1/sigma_sq) * (Q_star + diag(1/as.numeric(lambda_star^2),
+                p, p)))
+            v = solve(t(L), t(t(y) %*% X)/sigma_sq)
+            mu = solve(L, v)
+            u = solve(L, stats::rnorm(p))
+            Beta = mu + u
+        }
+        eta = 1/(lambda^2)
+        upsi = stats::runif(p, 0, 1/(1 + eta))
+        tempps = Beta^2/(2 * sigma_sq * tau^2)
+        ub = (1 - upsi)/upsi
+        Fub = 1 - exp(-tempps * ub)
+        Fub[Fub < (1e-04)] = 1e-04
+        up = stats::runif(p, 0, Fub)
+        eta = -log(1 - up)/tempps
+        lambda = 1/sqrt(eta)
+        if (method.tau == "halfCauchy" ||
+            method.tau == "relative") {
+            tempt = sum((Beta/lambda)^2)/(2 * sigma_sq)
+            et = 1/tau^2
+            utau = stats::runif(1, 0, 1/(1 + et))
+            ubt = (1 - utau)/utau
+            Fubt = stats::pgamma(ubt, (p + 1)/2, scale = 1/tempt)
+            Fubt = max(Fubt, 1e-08)
+            ut = stats::runif(1, 0, Fubt)
+            et = stats::qgamma(ut, (p + 1)/2, scale = 1/tempt)
+            if (method.tau == "relative") {
+              tau = sqrt(sigma_sq/et)
+            } else {
+              tau = sqrt(1/et)
+            }
+        }
+        if (method.tau == "truncatedCauchy") {
+            tempt = sum((Beta/lambda)^2)/(2 * sigma_sq)
+            et = 1/tau^2
+            utau = stats::runif(1, 0, 1/(1 + et))
+            ubt_1 = 1
+            ubt_2 = min((1 - utau)/utau, p^2)
+            Fubt_1 = stats::pgamma(ubt_1, (p + 1)/2, scale = 1/tempt)
+            Fubt_2 = stats::pgamma(ubt_2, (p + 1)/2, scale = 1/tempt)
+            ut = stats::runif(1, Fubt_1, Fubt_2)
+            et = stats::qgamma(ut, (p + 1)/2, scale = 1/tempt)
+            tau = 1/sqrt(et)
+        }
+        if (method.sigma == "Jeffreys") {
+            if (algo == 1) {
+                E_1 = max(t(y - X %*% Beta) %*% (y - X %*% Beta),
+                  (1e-10))
+                E_2 = max(sum(Beta^2/((tau * lambda))^2), (1e-10))
+            }
+            else {
+                E_1 = max(t(y - X %*% Beta) %*% (y - X %*% Beta),
+                  1e-08)
+                E_2 = max(sum(Beta^2/((tau * lambda))^2), 1e-08)
+            }
+            sigma_sq = 1/stats::rgamma(1, (n + p)/2, scale = 2/(E_1 +
+                E_2))
+        }
+        if (i%%1000 == 0) {
+            print(i)
+        }
+        if (i > burn && i%%thin == 0) {
+            betaout[, (i - burn)/thin] = Beta
+            tauout[(i - burn)/thin] = tau
+            sigmaSqout[(i - burn)/thin] = sigma_sq
+        }
+    }
+    pMean = apply(betaout, 1, mean)
+    pMedian = apply(betaout, 1, stats::median)
+    pSigma = mean(sigmaSqout)
+    pTau = mean(tauout)
+    left <- floor(alpha * effsamp/2)
+    right <- ceiling((1 - alpha/2) * effsamp)
+    BetaSort <- apply(betaout, 1, sort, decreasing = F)
+    left.points <- BetaSort[left, ]
+    right.points <- BetaSort[right, ]
+    result = list(BetaHat = pMean, LeftCI = left.points, RightCI = right.points,
+        BetaMedian = pMedian, Sigma2Hat = pSigma, TauHat = pTau,
+        BetaSamples = betaout, TauSamples = tauout, Sigma2Samples = sigmaSqout)
+    return(result)
+}
+
+```
+
 This is unexpected given the tail-robustness property of horseshoe prior. The contour plot also shows that the density is concentrated around zero. 
 
 ```{r}
@@ -52,9 +190,39 @@ theta.smpls.hs <- t(res$BetaSamples)
 colnames(theta.smpls.hs) = c("theta1", "theta2")
 
 hs.2d.density<- ggplot(as.data.frame(theta.smpls.hs), aes(theta1, theta2)) +
-  geom_density2d()+stat_density2d(aes(fill = ..level..), geom="polygon")+
-  xlab(expression(theta[1]))+ylab(expression(theta[2]))+ggtitle("Horseshoe Regression")
+  geom_density2d() + stat_density2d(aes(fill = ..level..), geom="polygon") +
+  xlab(expression(theta[1])) + ylab(expression(theta[2])) + ggtitle("Horseshoe Regression")
+
 print(hs.2d.density)
+```
+
+Next, we produce samples under $\tau \sim C^{+}(0, \sigma)$.
+```{r}
+res_rel <- horseshoe_rel(y, X, method.tau = "relative",
+                 method.sigma = "Jeffreys",
+                 burn = 1000, nmc = 5000, alpha = 0.05)
+
+```
+
+We can also produce a marginal view of the two $\theta$ values.
+```{r}
+library(reshape2)
+library(dplyr)
+
+theta_smpls_abs_hs_melt = melt(res$BetaSamples)
+theta_smpls_abs_hs_melt = theta_smpls_abs_hs_melt %>% filter(value > -10 & value < 30)
+theta_smpls_abs_hs_melt$tau_prior = "absolute"
+
+theta_smpls_rel_hs_melt = melt(t(res_rel$BetaSamples))
+theta_smpls_rel_hs_melt = theta_smpls_rel_hs_melt %>% filter(value > -10 & value < 30)
+theta_smpls_rel_hs_melt$tau_prior = "relative"
+
+theta_smpls_hs_melt = rbind(theta_smpls_abs_hs_melt, theta_smpls_rel_hs_melt) 
+
+ggplot(theta_smpls_hs_melt, aes(value, ..density..)) + 
+  geom_histogram() + 
+  facet_grid(. ~ tau_prior, scales='free') + xlab(expression(theta))
+  # ggtitle("Absolute scaling") + xlab(expression(theta))
 ```
 
 The $\tau, \sigma^2$ samples for the truncated Cauchy and Jeffrey's prior:
