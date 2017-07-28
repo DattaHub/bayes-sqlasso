@@ -95,6 +95,7 @@ plot.data = all.data %>%
             lower = quantile(value, prob=0.05),
             middle = median(value))
 
+library(ggplot2)
 theta.plot = ggplot(plot.data,
                     aes(x=component, y=middle, group=component,
                         colour=var)) + theme_bw() +

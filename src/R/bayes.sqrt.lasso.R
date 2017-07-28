@@ -30,10 +30,10 @@ bayes.sqrt.lasso <- function(Y, method.tau = "fixed", r = 1, delta = 0.5, nmc=10
     Theta = Theta_new
     
     # Now update Lambda, comment out for global shrinkage only
-    Lambda2_new = rinvgauss(n, mean = abs(Theta/Tau), shape = Theta^2)
+    # Lambda2_new = rinvgauss(n, mean = abs(Theta/Tau), shape = Theta^2)
     
     ## Following Bayesian Lasso 
-    ## Lambda2_new = 1/rinvgauss(n, mean = abs(Tau/Theta), shape = Tau^2)
+    Lambda2_new = 1/rinvgauss(n, mean = abs(Tau/Theta), shape = Tau^2)
     
     # XXX: A hack to avoid 0/0 in Lambda / Tau.
     Lambda2_new = ifelse(Lambda2_new < eff_zero, eff_zero, Lambda2_new)
