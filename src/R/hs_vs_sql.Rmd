@@ -301,3 +301,45 @@ hs.2d.density<- ggplot(as.data.frame(theta.smpls.hs), aes(theta1, theta2)) +
   xlab(expression(theta[1]))+ylab(expression(theta[2]))+ggtitle("Horseshoe Regression (E-Bayes)")
 print(hs.2d.density)
 ```
+
+## Multivariate Normal Means Example 
+
+This situation prevails even when the underlying $\beta$ vector is a multivariate parameter with half of the values set to zero. (This is not a sparse situation as the proportion of non-null effects is exactly 0.5.)
+
+```{r}
+beta = c(rep(20,50),rep(0,50))
+X = diag(100)
+y_hat = X %*% beta
+y = drop(y_hat + rnorm(nrow(X)))
+```
+
+We will use two different methods: horseshoe using the `horseshoe` R package and a Bayesian version of scaled / square-root Lasso. 
+
+### Horseshoe results 
+
+```{r}
+library(horseshoe)
+res <- horseshoe(y, X, method.tau = "fixed",
+                 method.sigma = "Jeffreys",
+                 burn = 1000, nmc = 5000, alpha = 0.05)
+
+(postmean_HS <- res$BetaHat)
+(postmedian_HS <- res$BetaMedian)
+(map_HS <- apply(res$BetaSamples,1,Mode))
+```
+
+Bayesian Square-root Lasso is not affected. 
+
+```{r}
+res2 <- bayes.sqrt.lasso(Y = y,method.tau ="gamma", r = 1, delta = 2, burn = 1000, nmc = 5000, verbose=FALSE)
+(postmean_SQL <- res2$ThetaHat)
+```
+
+Horseshoe prior can recover the true $\beta$ under the relatively scaled prior on the global shrinkage parameter $\tau \sim C^{+}(0, \sigma)$.
+
+```{r}
+res_rel <- horseshoe_rel(y, X, method.tau = "relative",
+                 method.sigma = "Jeffreys",
+                 burn = 1000, nmc = 5000, alpha = 0.05)
+(postmean_HS_rel <- res_rel$BetaHat)
+```
