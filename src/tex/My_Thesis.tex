@@ -1,0 +1,845 @@
+%% UA doctoral thesis template to accompany uamaththesis.cls
+%% last updated March 2016. Please suggest corrections, changes and
+%% improvements to Dan Luecking, SCEN 354.
+
+% Load the class file. This takes the option "chapters". The
+% chapters option indicates that your thesis has chapter subdivisions.
+% If it is present, this class loads the LaTeX report class, otherwise
+% it loads the article class. Either is loaded with the "12pt" option.
+% Any other options are passed directly to the loaded class:
+\documentclass[chapters]{uamaththesis}
+\input{math-commandsB}
+
+%\usepackage{parskip}
+%\usepackage[slantedGreek]{mathpazo}
+\usepackage{amsmath,amssymb,amsthm,amsfonts , mathtools}
+%\usepackage[top=8pc,bottom=8pc,left=8pc,right=8pc]{geometry}
+%\usepackage{ntheorem}
+
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{epstopdf}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{nicefrac}
+
+%% Please use the following statements for
+%% managing the text and math fonts for your papers:
+\usepackage{times}
+%\usepackage[cmbold]{mathtime}
+\usepackage{bm}
+% loading packages (amsmath, amssymb, amsthm, setspace, and tocbibind
+% are already preloaded).
+\usepackage{enumerate} % for example
+\usepackage[authoryear]{natbib}
+% your definitions
+%\newcommand{\disk}{\mathbb{D}} % for example
+\def\Polya{P{\'o}lya}
+\def\CS{Cauchy-Schl\"omilch}
+\def\PG{P{\'o}lya-Gamma}
+\def\sql{$\sqrt{\text{Lasso }}$}
+\def\sqdl{$\sqrt{\text{\rm{DL} }}$}
+%\newcommand{\sql}{$\sqrt{\text{Lasso}}$}
+
+% Theorem-like environments:
+% These are predefined, but you may redo any of them with shorter names
+% if you prefer.
+%  \theoremstyle{plain}
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{lemma}[theorem]{Lemma}
+%  \theoremstyle{definition}
+%\newtheorem{definition}{Definition}[section]
+%\newtheorem{example}{Example}[section]
+%  \theoremstyle{remark}
+%\newtheorem{remark}{Remark}
+
+% Your thesis title:
+% You must use title case: generally every word is capitalized
+% except articles (the, a, an) prepositions (e.g., of, to, in, with, for)
+% and conjunctions (e.g., and, or, but,)
+% Required.
+\title{Adapting to Sparsity and Heavy Tailed Data}
+
+% Your name as ISIS knows you:
+% Required.
+\author{Mohamed Abdelkader Abba}
+
+% information about your bachelors degree or the equivalent
+% Required.
+\bachelorinstitution{University of Nouakchott}
+\bachelordegree{Bachelor of Science in Applied Mathematics}
+\bacheloryear{2011}
+
+% information about your masters degree or other post baccalariat degree
+% Required only if you have one. I have made provisions for only one,
+% see me if you have more than one.
+%\masterinstitution{University of Arkansas}
+%\masterdegree{Master of Science in Statistics and Analytics}
+%\masteryear{2018}
+
+% Month and year of the final approval
+% required
+\date{August 2018}
+
+% Your advisor
+% Required.
+\dissertationdirectorone{Jyotishka Datta,\ PhD}
+
+% Your dissertation committee. Titles required (use Dr. or Prof. unless
+% neither applies). If no title applies, put the the highest degree
+% earned after the name
+% Two required, extras are optional. I have made provision for up to
+% four
+\committeemembertwo{Qingyang Zhang,\ PhD}
+\committeememberone{Avishek Chakraborty,\ PhD}
+%\committeememberthree{Dr.\ Mario N. Luigi}
+%\committeememberfour{Luigi N. Mario, M.F.A.}
+
+\begin{document}
+
+% Start of thesis. The \frontmatter command turns off page numbering
+% until the \mainmatter command. This is the style mandated by the UA
+% dissertation guide.
+% Required:
+\frontmatter
+\maketitle
+
+% The grad school now requires the right margins not be justified.
+% The \raggedright command is rather inelegant (for example it sets
+% paragraph indentation to zero for no reason). One can get more
+% control of "raggedness" using the ragged2e package.
+% Required:
+\raggedright
+\parindent 20pt
+
+
+
+% The abstract. Should be less than one page, but this is not forced.
+% Required:
+\begin{abstract}
+
+The Lasso and the Horseshoe, gold-standards in the frequentist and Bayesian paradigms, critically depend on learning the error variance. This causes a lack of scale invariance and adaptability to heavy-tailed data. The \sql{} \citep{belloni2011square} attempt to correct this by using the $\ell_1$ norm on both the likelihood and the penalty for the objective function. In contrast, there is essentially no methods for uncertainty quantification or automatic parameter tuning via a formal Bayesian treatment of an unknown error distribution. On the other hand, Bayesian shrinkage priors lacking a local shrinkage term fails to adapt to the large signals embedded in noise. In this thesis, I propose to build a fully Bayesian method called \sqdl{} that achieves scale invariance and robustness to heavy tails while maintaining computational efficiency. 
+The classical \sql{} estimate is then recovered as the posterior mode with an appropriate modification of the local shrinkage prior. The Bayesian \sqdl{} leads to uncertainty quantification by yielding standard error estimates and credible sets for the underlying parameters. Furthermore, the hierarchical model leads to an automatic tuning of the penalty parameter using a full Bayes or empirical Bayes approach, avoiding any ad-hoc choice over a grid. We provide an efficient Gibbs sampling scheme based on Normal scale mixture representation of Laplace densities. Performance on real and simulated data exhibit excellent small sample properties and we establish some theoretical guarantees. 
+\end{abstract}
+
+
+\begin{acknowledgements}
+
+I would like to express my sincere gratitude to my advisor Dr. Jyotishka Datta for the continuous support during this thesis preparation and beyond. His patience, motivation, knowledge, and guidance helped me in all the time of research and writing of this work. I could not have imagined having a better advisor and mentor.
+
+
+I would also like to thank the Faculty and staff at the Department of Mathematical Sciences, and specially those affiliated with the Statistics program for their encouragement, teaching and advice. I also want to thank the committee members Dr. Avishek Chakraborty and Dr. Quingyang Zhang.
+
+
+Finally, I must express my very profound gratitude to my parents and my family for providing me with unfailing support and continuous encouragement throughout my years of study and through the process of researching and writing this thesis. This accomplishment would not have been possible without them. Thank you.
+I would like to thank everyone at the University of Arkansas for being so
+helpful throughout the two years of my master studies. Thanks to
+all the faculty and staff for enabling my education goals and providing
+the opportunities for me to be successful. A special thanks to the Director of the Statistics track Dr.Giovanni Petris.
+\end{acknowledgements}
+
+% Acknowledgements. Usually less than one page
+% Not required, but I've never seen a thesis without one:
+
+
+% Table of Contents.
+% Required:
+\tableofcontents
+
+% Signals start of actual thesis. Starts up page numbering.
+% Required:
+\mainmatter% Acknowledgements. Usually less than one page
+% Not required, but I've never seen a thesis without one:
+
+
+
+\chapter{Introduction}
+
+Global-local shrinkage priors have been established as the current state-of-the art inferential tool for sparse signal detection and recovery as well as the default choice for handling non-linearity in what have hitherto been paradoxical problems without a Bayesian answer. Despite these success stories, certain aspects of their behavior, such as performance in presence of correlated errors or adapting to unknown error distribution, remain unexplored. The aim of this thesis is to offer insightful solutions to these open problems motivated by the changing landscape of modern applications. The tools developed here aim at achieving scalability and strong theoretical support while focusing on their usefulness in current applications. 
+
+Feature selection, or selecting a subset of covariates, is pervasive in countless modern applications, specially those involving a `wide' data set, where number of features ($p$) far exceed the number of samples ($n$). The most popular inferential problems are the sparse normal means problem: $(Y_i \mid \beta_i)  \id \Nor (\beta_i,1), i = 1, \dots, n$, and the sparse linear regression: $\Y = \X \bbeta + \bepsilon$, $p \gg n$, $\bepsilon \sim \Nor(\0, \I)$, where $\bbeta$ is a `nearly black object', that is, $\bbeta \in l_0 [ p_n] \equiv \{ \bbeta : \# ( \beta_i \neq 0 ) \leq p_n \}, \, \text{where } p_n = o(n) $. Current literature provides a rich variety of methodologies for high-dimensional inference based on regularization which implicitly or explicitly penalizes models based on their dimensionality. Convex penalties, such as the Lasso \citep{tibshirani96}, the elastic net \citep{zou2005regularization}, or their variants, enjoy a number of advantages, such as uniqueness of solution, efficient computation and relatively straightforward theoretical analysis. The gold standard is Lasso (Least Absolute Shrinkage and Selection Operator) that produces a sparse point estimate by constraining the $\ell_1$ norm of the parameter vector.  
+
+The reason behind the popularity of Lasso \citep{tibshirani96} and many of its variants \citep{tibshirani2014praise} as inferential tool in high-dimensional data is due to factors such as: 
+\begin{enumerate}
+	\item Computational efficiency of Least Angle Regression (LARS) method \citep{efron_least_2004} and coordinate descent \citep{friedman_pathwise_2007}, 
+	\item Optimality (oracle) properties for both estimation and variable selection \citep[\textit{vide}][]{buhlmann2011statistics, james2013introduction, hastie2015statistical}. 
+\end{enumerate}
+
+Regularized methods prevent over-fitting by implicitly or explicitly penalizing model dimensionality. This amounts to controlling the bias-variance trade-off and are particularly useful for sparse learning, when the number of variables ($p$) exceed the number of observations ($n$). In the context of linear regression $Y = X \bbeta + \bepsilon$, a regularized estimate of $\bbeta$ is obtained by minimizing the penalized likelihood:
+\begin{align}
+\hat{\bbeta}_{\lambda^*}^{\text{pen}} & = \argmin_{\bbeta \in \Re^p} \{ \vectornorm{Y - X\bbeta}^2 + \lambda^* \Omega(\bbeta) \}, \label{eq:penalize} \\
+  \text{where, } & \Omega(\bbeta) = \sum_{j=1}^{p} \omega(\beta_j) \text{ is a separable penalty.} \nonumber
+\end{align}
+The gold-standard for regularized method is Lasso that simultaneously performs estimation and model selection by constraining the $\ell_1$ norm of the underlying parameter vector, i.e. $\omega(\beta_j) = \abs{\beta_j}$. 
+\beq
+\hat{\bbeta}_{\lambda^*}^{\text{lasso}} = \argmin_{\bbeta \in \Re^p} \{ \vectornorm{Y - X\bbeta}^2 + \lambda^* \norm{\bbeta}_1 \} \label{eq:lasso}
+\eeq
+
+As discussed above, Lasso enjoys both computational efficiency, due to LARS \citep{efron_least_2004} and coordinate descent \citep{friedman_pathwise_2007}, as well as theoretical optimality properties \citep{buhlmann2011statistics}. \citet{bickel2009simultaneous} have shown that the Lasso estimator achieves near-orcale property in recovering the true $\bbeta_0$, under Gaussianity and certain design matrix conditions, up to a factor of $\sqrt{\log( 2 p)}$: yielding a $\sqrt{\log n}$ rate when $p$ grown polynomially as $n$. 
+
+\noindent \textbf{Bayesian Duality}
+
+The penalization approaches can be also explained from a Bayesian framework by interpreting the penalty as the logarithm of a suitable prior as follows:
+\begin{align}
+ \min_{\beta \in \Re^d}
+  \left\{
+    l(y \mid \beta) + \text{pen}_{\lambda}(\beta) 
+  \right\}
+  & = \argmax_\beta p(\beta \mid y) = p(y \mid \beta) p_{\lambda}(\beta) \nonumber \\
+	\text{ where } p(y \mid \beta) \propto \exp\{-l(y \mid \beta)\} & , \quad p_{\lambda}(\beta)
+  \propto \exp\{ -\text{pen}_{\lambda}(\beta) \}. \label{eq:pen} \nonumber
+\end{align}
+
+The Bayesian correspondence leads to uncertainty quantification by yielding standard error estimates and credible sets for the underlying parameters and automatic tuning of the penalty parameter using a full Bayes or empirical Bayes approach, avoiding any ad-hoc choice over a grid. However, convex penalties such as Lasso yield a posterior that is `useless for uncertainty quantification' \citep{castillo2015bayesian} and equivalent Bayesian hierarchical models are notably absent for the non-convex methods. 
+
+The popularity of global-local (G-L) shrinkage priors in the `nearly-black' or `ultra-sparse' regime, marked by parameter $\beta \in \ell_0[p_n]$, with $p_n \to 0$, is largely due their optimal theoretical and empirical performance. The key idea behind G-L priors is to use global shrinkage to adjust to the overall sparsity and local shrinkage to identify the strong signals. These priors avoid the computational bottle-neck of searching over an exponentially growing model space, which obstructs the spike-and-slab prior \citep{mitchell88} on ultra-high dimensions. For the sparse normal means model $(y_i \mid \beta_i)  \id \Nor (\beta_i,1)$ for $i = 1, \ldots, n$, the horseshoe prior \citep{carvalho2010horseshoe} is given by the hierarchical model: 
+\begin{align*}
+  (y_i \mid \beta_i) & \sim \Nor(\beta_i , \sigma^2), \;  (\beta_i \mid u_i, \tau) \sim 
+  \Nor(0, u_i^2 \tau^2), \; u_i ^2 \sim \operatorname{C}^{+}(0,1), \quad i = 1, \ldots, n. 
+  %\label{eq:hs}
+\end{align*}
+Horseshoe prior operates by directly modeling the posterior inclusion probability $P(\beta_i \ne 0 \mid y_i)$ such that the probability concentrates near $0$ or $1$ for noise and signals, respectively. This follows from the linearity of posterior mean under the horseshoe prior that mimics a spike-and-slab model:
+\begin{equation}
+\E(\beta_i \mid y_i) = \{1- \E(\kappa_i \mid y_i)\}y_i \text{ where } \kappa_i = 1/(1+u_i^2 \tau^2) \label{eq:kappa}
+\end{equation}
+The $U$-shaped posterior is a direct outcome of putting a $\text{Be}(1/2,1/2)$ prior on the shrinkage coefficient $\kappa_i$, lending horseshoe its name. Since the inception of the horseshoe prior, many G-L priors have been proposed, focusing on the sparse normal means and regression problem. Some of the popular G-L priors include the Normal Exponential Gamma \citep{griffin2005alternative}, generalized double Pareto (GDP) \citep{armagan2013generalized}, the three-parameter beta \citep{armagan2011generalized}, the Dirichlet-Laplace \citep{bhattacharya2014dirichlet} and the more recent spike-and-slab Lasso \citep{rovckova2016spike}, horseshoe+ \citep{bhadra2015horseshoe+} and the R2-D2 \citep{zhang2016high} priors. 
+
+
+
+\noindent \textbf{Square-root Lasso} 
+
+Despite the attractive features of Lasso, its performance in high-dimensional data is critically dependent on estimating the standard deviation $\sigma$ of the noise $\epsilon$, which remains a non-trivial problem in $p \gg n$ situation. The square-root Lasso, proposed by \cite{belloni2011square}, is a modification of Lasso that eliminates the need for knowing $\sigma$, or pre-estimating it. The square-root Lasso is also independent of the Gaussianity or sub-gaussianity of noise. In fact, as \citet{giraud2014introduction} points out, the Lasso estimate with $\ell_1$ penalty is not scale-invariant in the sense that the invariance relation $\hat{\bbeta}(\sigma Y, X) = \sigma \hat{\bbeta}(Y, X)$ does not hold for all $\sigma > 0$. Since the standard deviation of noise $\epsilon$ is $\sigma$, one way of obtaining a scale-invariant penalized estimator is to set $\lambda^* = \lambda \sigma$ in \eqref{eq:penalize}, yielding:
+\begin{align}
+\hat{\bbeta}^{\text{inv}} & = \sigma^{-1} \vectornorm{Y - X\bbeta}^2 + \lambda \Omega(\bbeta), \text{where, } \sigma = \text{sdev}(\epsilon)
+\end{align}
+Estimating $\sigma$ by $\vectornorm{Y-X\bbeta}/\sqrt{n}$ and using the $\ell_1$ penalty $\Omega(\bbeta) = \norm{\bbeta}_1$ leads to the $\sqrt{\text{Lasso}}$ estimator: 
+\beq
+\hat{\bbeta}_{\lambda}^{\sqrt{\text{lasso}}} = \argmin_{\bbeta \in \Re^p} \{ \sqrt{n} \vectornorm{Y - X\bbeta}_2 + \lambda \norm{\bbeta}_1 \} \label{eq:sqlasso}
+\eeq
+Clearly, the square-root Lasso estimator is scale-invariant and hence independent of the knowledge of $\sigma$, and still enjoys computational efficiency as the objective function is convex. The resulting estimator also enjoys near-oracle convergence rate, similar to Lasso, when $\text{supp}(\bbeta_0)$ has only $s$ elements, $s < n$ \citep{belloni2011square}. 
+
+The square-root Lasso admits an alternative representation / algorithm, as another variant of Lasso called Scaled Lasso \citep{sun2012scaled}, that establishes the connection between the original Lasso and the square-root Lasso. Following \citet{giraud2014introduction},  the square-root Lasso estimator in \eqref{eq:sqlasso} and $\hat{\sigma} = \vectornorm{Y-X\bbeta}/\sqrt{n}$ can be written as solution to the convex system:
+\beq
+(\hat{\bbeta},\hat{\sigma}) = \argmin_{\bbeta \in \Re^p, \sigma \in \Re^+} \left\{ \frac{n \sigma}{2} + \frac{\vectornorm{Y-X\bbeta}_2^2}{2\sigma} + \lambda \norm{\bbeta}_1 \right\}
+\eeq
+Hence, we have the following relationship between Lasso and the square-root Lasso estimators:
+\[
+\hat{\bbeta}_{\lambda}^{\sqrt{\text{lasso}}} = \hat{\bbeta}_{2\lambda \hat{\sigma}}^{\text{lasso}}, \quad \text{where } \quad \hat{\sigma} = \vectornorm{Y-X\bbeta}/\sqrt{n}
+\]
+This implies that the square-root Lasso (or, scaled Lasso) can be efficiently calculated by a scheme that alternately finds a Lasso estimate $\hat{\bbeta}$ and $\hat{\sigma}$, resulting in the scaled-Lasso algorithm \citep{sun2012scaled}.  
+
+Despite the attractive properties of these methods, there is a common caveat: the choice of tuning parameter $\lambda$. For Lasso, the tuning can be done either via a $k$-fold cross-validation or a complexity selection technique \citep{giraud2012high}. However, these methods come with some concerns: while the $k$-fold CV works well empirically, it lacks theoretical support and the complexity selection is only guaranteed to work under Gaussianity of the data. The scale-invariant methods improve this situation slightly by making the tuning parameter free of $\sigma$, but it still requires tuning by adapting to the data. 
+
+Furthermore, it has been noted by some authors \citep{chatterjee2011bootstrap} that the Lasso-based estimates do not yield meaningful standard errors for the parameter estimates, motivating full Bayesian treatment that produces reliable uncertainty quantification without extra effort. The Bayesian treatments of penalized regression depend on the useful duality of penalty and $\log$-prior, and (Normal) scale mixture representation of the prior (e.g. Laplace as Normal-Gamma) that leads to efficient computation via EM/ECME or MCMC algorithms. 
+
+My main contribution in this thesis is twofold. First, we provide a Bayesian interpretation of the square-root Lasso estimator based on the scale mixture representation of the Laplace density. Apart from quantifying uncertainty, this representation provides at least two alternative computational tools: via MCMC and via proximal algorithm \citep{polson2015proximal}. We also offer new insights into the estimators behavior by investigating the resulting posterior distribution and the shrinkage weights. Next, we extend and generalize the Bayesian \sql{} estimator with an appropriate local shrinkage term to the Bayesin \sqdl{} estimator. The proposed estimator achieves better robustness compared to the popular G-L priors such as horseshoe in terms of (1) adapting to strong covariate dependence and (2) adapting to the level of sparsity in the data. 
+
+The rest of the thesis is organized as follows: Chapter \ref{ch:2} describes the Bayesian square-root Lasso and the Bayesian square-root Dirichlet--Laplace estimator, Chapter provides some numerical examples to illustrate how the proposed method outperforms the existing G-L priors. Chapter 4 provides concludes with future directions.  
+
+
+%%%%%%%%% NEW CHAPTER  
+
+\chapter{Methodology: Bayesian $\sqrt{\text{Lasso}}$ and $\sqrt{\text{\rm{DL}}}$ }\label{ch:2}
+
+Penalized regression methods such as Lasso are critically dependent on estimating the error variance $\sigma^2$ , which remains a non-trivial problem in high-dimensional $p \gg n$ situation. The square-root Lasso \citep{belloni2011square} is a variant of Lasso that eliminates the need for knowing or pre-estimating $\sigma$ and adapts to sub-Gaussian noise. The $\sqrt{\text{Lasso}}$ method uses a plug-in estimate of $\hat \sigma = \vectornorm{Y-X\bbeta}/\sqrt{n}$ in the Lasso optimization \eqref{eq:pen} to obtain : 
+
+\beq
+\hat{\bbeta}_{\lambda}^{\sqrt{\text{lasso}}} = \argmin_{\bbeta \in \Re^p} \{ \sqrt{n} \vectornorm{Y - X\bbeta}_2 + \tau \norm{\bbeta}_1 \} \label{eq:sqlasso}
+\eeq
+
+The resulting estimator enjoys near-oracle convergence rate, similar to Lasso, when $\text{supp}(\bbeta_0)$ has only $s$ elements, $s < n$ as well as computational speed by dint of its convexity \citep{belloni2011square}. Moreover, unlike Lasso, the \sql{} estimator is also scale invariant, i.e., $\hat{\bbeta}(\sigma Y, X) = \sigma \hat{\bbeta}(Y, X), \forall \sigma > 0$ \citep{giraud2014introduction}. It turns out that the resulting estimator is identical to another regularization method, called the scaled Lasso \citep{sun2012scaled}, which jointly optimizes $\bbeta$ and $\sigma$. 
+\[
+(\hat{\bbeta},\hat{\sigma}) = \argmin_{\bbeta \in \Re^p, \sigma \in \Re^+} \left\{ n/2 + \vectornorm{Y-X\bbeta}_2^2 / (2\sigma) + \tau \norm{\bbeta}_1 \right\}
+\]
+Hence, we have the following relationship between Lasso and the square-root Lasso estimators:
+\[
+\hat{\bbeta}_{\lambda}^{\sqrt{\text{lasso}}} = \hat{\bbeta}_{2\lambda \hat{\sigma}}^{\text{lasso}}, \quad \text{where } \quad \hat{\sigma} = \vectornorm{Y-X\bbeta}/\sqrt{n}
+\]
+This implies that the square-root Lasso (or, scaled Lasso) can be efficiently calculated by a scheme that alternately finds a Lasso estimate $\hat{\bbeta}$ and $\hat{\sigma}$, resulting in the scaled-Lasso algorithm \citep{sun2012scaled}.  
+
+Despite the attractive properties of these methods, there is a common caveat: the choice of tuning parameter $\lambda$. For Lasso, the tuning can be done either via a $k$-fold cross-validation or a complexity selection technique \citep{giraud2012high}. However, these methods come with some concerns: while the $k$-fold CV works well empirically, it lacks theoretical support and the complexity selection is only guaranteed to work under Gaussianity of the data. The scale-invariant methods improve this situation slightly by making the tuning parameter free of $\sigma$, but it still requires tuning by adapting to the data. 
+%
+%Furthermore, it has been noted by some authors \citep{chatterjee2011bootstrap} that the Lasso-based estimates do not yield meaningful standard errors for the parameter estimates, motivating full Bayesian treatment that produces reliable uncertainty quantification without extra effort. The Bayesian treatments of penalized regression depend on the useful duality of penalty and $\log$-prior, and (Normal) scale mixture representation of the prior (e.g. Laplace as Normal-Gamma) that leads to efficient computation via EM/ECME or MCMC algorithms.
+
+Despite their desirable characteristics, \sql{} has two major concerns. First, the choice of tuning parameter $\tau$: one can use either a $k$-fold cross-validation or a complexity selection, but the former lacks theoretical support and the latter is restricted to Gaussian data \citep{giraud2012high}. Second, inability to yield meaningful error estimates for the parameters by Lasso-based methods \citep{chatterjee2011bootstrap}. To solve these issues, we propose a Bayesian \sql{} that fully quantifies uncertainty and leads to efficient computation via MCMC.
+%Methodology
+% New part here : Motoivation
+\section{Hierarchical Model}
+Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text{Lasso}}$ in \eqref{eq:sqlasso}. Since the likelihood-prior decompsoition of \eqref{eq:sqlasso} yield a Laplace density for both the observation and the prior model, we use a Gaussian scale mixture representation of Laplace to write the Bayesian hierarchy. The key steps in the Bayesian hierarchy for $\sqrt{\text{Lasso}}$ follows from the well-known identity due to \citet{levy1940certains} given by:
+\begin{equation}
+  \int_{0}^{\infty} \frac{a}{(2 \pi)^{1/2} t^{3/2}} \exp\{-{a^2}/({2 t})\} \exp\{-\lambda t\} dt = \exp\{-a (2 \lambda)^{1/2} \} \;.\label{eq:levy}
+\end{equation}
+The Levy identity \eqref{eq:levy} leads to the  well-known normal scale mixture representation of Laplace density \citep{andrews_scale_1974}. Let $Q(\bbeta)= \norm{\y - \X \bbeta}_2^2$. Using $a = 1$, and $2\lambda = Q(\bbeta)$ yields:
+%\begin{equation}
+%\exp \left[-\{(\y - \X \bbeta)^{\T}(\y - \X \bbeta) \}^{1/2} \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \e^{-{1}/({2 t})} \e^{- \half Q(\bbeta) t} dt \label{eq:t_i}
+%\end{equation}
+\beq
+\exp \left[-\vectornorm{Y - X\bbeta}_2 \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \exp\{-{1}/({2 t})\} \exp\{-Q(\bbeta)t /2 \} dt \label{eq:t_i}
+\eeq
+Alternatively, we can use $a = Q(\bbeta)$ and $\lambda = 1/2$ to obtain an equivalent decomposition:
+\begin{equation}
+\exp \left[-\vectornorm{Y - X\bbeta}_2 \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} v} \exp\{-{v^2}/{2}\} \exp\{- \nicefrac{Q(\bbeta)}{2v^2}\} dv^2 \label{eq:v_i}
+\end{equation}
+To complete the hierarchy we use the normal scale mixture of Laplace prior on $\bbeta$  as follows:
+\[
+\pi(\beta_i) \propto e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi} \lambda_i} \e^{-\beta_i^2/(2\lambda_i^2)} \; \frac{\tau^2}{2} \e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2, \quad i = 1, \ldots, p.
+\]
+The hyper-parameter $\tau$ serves the role of the tuning parameter in square-root Lasso. There are several different ways of treating $\tau$. We can treat it as a fixed tuning parameter and use pre-specified values on a grid to choose one.  We can also either estimate $\tau$ via an empirical Bayes marginal maximum likelihood or use a suitable hyperprior on $\tau$ to learn via full Bayes. For the Bayesian Lasso, \cite{park_bayesian_2008} used a Gamma hyper-prior to make the tuning parameter a part of the Gibbs sampler. 
+\beq
+\pi(\tau^2) = \frac{\delta^r}{\Gamma(r)} (\tau^2)^{r-1} e^{-\delta \tau^2}, \; \tau^2 > 0, \; (r >0, \delta >0).
+\eeq
+Under the scale-mixture decomposition \label{eq:v_i}, and the Gamma hyper-prior on $\tau^2$, the joint distribution of $y_i$ and all the hyperparameters in the model is :
+\begin{multline}
+f(\y, \bbeta, v^2, \blambda, \tau^2 \mid \r, \delta) \propto 
+\frac{1}{(2 \pi)^{1/2} v} \e^{-{v^2}/({2})} \exp\{- \half \nicefrac{\norm{\y - \X \bbeta}_2^2 }{v^2}\} \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint}
+\end{multline}
+
+The joint distribution in \eqref{eq:joint} provides the full hierarchical model for a Bayesian treatment. 
+\begin{align}\label{sq_lasso_h}
+[\y \mid \bbeta, v^2] & \sim \NormRV(\X \bbeta, v^2 \I) \\
+[\bbeta \mid \blambda] & \sim \NormRV(\0, D_{\blambda}), \quad D_{\blambda} = \text{Diag}(\lambda_1^2, \ldots, \lambda_p^2) \\
+[\lambda_1^2, \ldots, \lambda_p^2 \mid \tau^2] & \sim \prod_{j=1}^{p} \sim \frac{\tau^2}{2} e^{-\lambda_j^2\tau^2/2} \d \lambda_j^2, \quad \lambda_j^2 > 0, \\
+[v^2] & \sim \mathcal{G}amma((n+1)/2 , 1/2),  \\
+[\tau^2] & \sim p(\tau^2) d\tau^2,  \; \tau^2 > 0. \quad [ \tau^2 \sim \GammaRV(r, \delta), \text{ or } \tau^2 \sim \CauchyRV(0,1). ]
+\end{align}
+
+
+%To maintain notational similarity, we first transform $t/2 = \sigma^{-2}$ and write the 
+%reprametrized joint distribution as: 
+%\begin{multline}
+%f(\y, \bbeta, \sigma^2, \blambda, \tau^2 \mid \r, \delta) \propto 
+%\frac{1}{\sqrt{\sigma^2}} \exp\{-{\sigma^2}/({4}) \} \exp \left\{- \half (\y - \X \bbeta)^{\T}(\y - \X \bbeta)/ \sigma^2 \right\} \\
+%\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \exp\{-\beta_i^2/(2\lambda_i^2)\} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint}
+%\end{multline}
+%Hence the hierarchical representation of the full model is as follows:
+%\begin{align}
+%\y \mid \bbeta, \sigma^2 & \sim \NormRV(\X \bbeta, \sigma^2 \I) \\
+%\bbeta & \sim \NormRV(\0, D_{\blambda}), \; D_{\blambda} = \text{Diag}(\lambda_1^2, \ldots, \lambda_p^2) \\
+%\lambda_1^2, \ldots, \lambda_p^2 & \sim \prod_{j=1}^{p} \sim \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2}, \; \lambda_i^2 > 0, \\
+%\tau^2, \sigma^2 & \sim (\tau^2)^{r-1} e^{-\delta \tau^2} \exp\{-{\sigma^2}/({4}) \}, \; \tau^2, \sigma^2 > 0. 
+%\end{align}
+
+
+\section{Gibbs Sampler}
+
+Let $ D_{\blambda} = \text{Diag}(\lambda_1^2, \ldots, \lambda_p^2)$ be the diagonal matrix of local shrinkage parameters. 
+Using the equivalent decomposition \eqref{eq:t_i}, and collecting the terms for $\bbeta$, the joint distribution can be re-written as follows with $t = 1/v^2$: 
+\begin{multline}
+f(\y, \bbeta, t, \blambda, \tau^2 \mid \r, \delta) \propto 
+\frac{1}{t^{3/2}} \exp\{-{1}/({2 t}) \} \exp \left[- \half \{ \bbeta^\T(\X^\T \X t + \D_{\blambda}^{-1})\bbeta - 2 \bbeta^\T \X^\T \y t \}\right] \\
+\prod_{i=1}^{p} {(\lambda_i^2)}^{-\half} \frac{\tau^2}{2} e^{-\lambda_i^2\tau^2/2} (\tau^2)^{r-1} e^{-\delta \tau^2} \label{eq:joint-beta}
+\end{multline}
+
+The full conditional distributions of $\bbeta$ and $\tau$ are easy to derive: The full conditional of $\bbeta$ is multivariate normal and $\tau$ is Gamma, exploiting the conjugacy. The parameters $t$ and $\lambda_i^2$ follow inverse Gaussian distribution, where we assume the following parametric form of the inverse Gaussian density:
+\[
+f(x \mid \lambda', \mu') = \sqrt{\frac{\lambda'}{2\pi}} x^{-3/2} \exp\left\{ - \frac{\lambda'(x-\mu')^2}{2(\mu')^2 x^2} \right \}, \quad x > 0 
+\]
+
+The full conditional distributions needed for implementing a Gibbs sampler are:	
+\begin{align*}
+\bbeta \mid \y, \blambda, t & \sim \NormRV \left( \A^{-1}\X^\T \y t , \A^{-1} \right), i = 1, \ldots, p, \\
+\text{ where } \A & = \X^\T \X t + \D_{\blambda}^{-1} \\
+t \mid \y, \bbeta & \sim \text{Inv-Gauss} \left(\mu' = {\norm{\y-\X\bbeta}_2}^{-1}, \lambda' = 1 \right) \\
+\lambda_i^{-2} \mid \beta_i, \tau & \sim \text{Inv-Gauss}(\mu' = \abs{\frac{\tau}{\beta_i}}, \lambda' = \tau^2)\\
+\tau^2 \mid \blambda, r, \delta & \sim \text{Gamma}(p + r, \delta + \sum_{i=1}^{p} \lambda_i^2/2)
+\end{align*}
+
+A special case of the linear regression model is the sparse normal means model: $y_i = \beta_i + \epsilon_i$, $\epsilon_i \sim \NormRV(0,\sigma^2)$, which results when the design matrix is equal to the identity matrix of appropriate dimension. The Gibbs sampler for the normal means model is identical to that for the linear regression, but faster as the full conditional distribution of $\beta_i$'s are univariate Gaussian, and hence more efficient than the multivariate sampling. 
+\beq \label{BSQ_NM}
+\beta_i \mid y_i, \lambda_i, t \sim \NormRV \left(y_i \frac{\lambda_i^2 t}{1 + t \lambda_i^2}, \frac{\lambda_i^2}{1 + t \lambda_i^2} \right), i = 1, \ldots, p.
+\eeq
+
+%\section{Marginal Density and Masreliez Theorem}
+
+\section{Posterior Properties}
+
+\subsection{Shrinkage Profile}
+
+Here compare the shrinkage profiles for the Bayesian \sql{} with that of the Horseshoe prior. Figure \ref{fig:profile} shows the posterior mean and median for the Bayesian \sql{} and Horseshoe prior plotted against the observations $y$. It appears from Fig. \ref{fig:profile} that the posterior mean estimator under the two methods behave almost identically, while the posterior median for Bayes-\sql{} offers a somewhat stronger shrinkage, resembling a hard-thresholding rule. 
+
+\begin{figure}[!ht]%
+\centering
+\includegraphics[width=0.7\columnwidth]{art/shrinkage_profile}%
+\caption{Shrinkage profile for the horseshoe posterior mean and Bayesian \sql{} posterior mean and median estimators. }%
+\label{fig:profile}%
+\end{figure}
+
+
+\subsection{Dependence on Error Variance $\sigma$}
+
+The key advantage of \sql{}, as pointed out by its authors \citep{belloni2011square}, is its ambivalence towards the error variance $\sigma^2$, resulting in an invariant estimator. It seems that these advantages would carry over to the Bayesian hierarchy as well. We illustrate this feature with a toy example borrowed from \citet{polson2010shrink}, created to warn against ignoring the dependence between $\tau$ and $\sigma^2$. The original example in \citet{polson2010shrink} generated two observations with true mean $20$, and considered the posterior under two different prior choices $\tau \sim \CauchyRV^{+}(0,1)$ (absolute scaling) and $\tau \sim \CauchyRV^{+}(0,\sigma)$ (relative scaling) and showed that the posterior becomes bimodal under the absolute scaling prior. The authors argued that ``the issue is one of averaging over uncertainty about $\sigma$ in estimating the signal-to-noise ratio'' -- precisely what the \sql{} aims to protect from. 
+
+We recreate this example in Fig. \ref{fig:effect-sigma}, with four different choices for handling the hyper-parameters $\sigma^2$ and $\tau^2$: 
+\ben 
+\item $\tau \sim \CauchyRV^+(0,1)$ (absolute scaling), $\sigma \sim 1/\sigma^2$ (Jeffreys's). 
+\item $\tau \sim \CauchyRV^+(0,\sigma)$ (relative scaling), $\sigma \sim 1/\sigma^2$ (Jeffreys's). 
+\item $\tau$ fixed, $\sigma \sim 1/\sigma^2$ (Jeffreys's), and
+\item $\tau$, $\sigma$ fixed, 
+\een
+where, `fixed' hyperparameters are estimated using an Empirical Bayes approach. The final candidate is the Bayesian \sql{}, which is free of $\sigma$, and we put a standard half-Cauchy prior on its global shrinkage term $\tau^2$. Fig. \ref{fig:effect-sigma} shows the posterior mode of $p(\beta \mid y)$ for the five different candidates. As expected, the horseshoe posterior concentrates near the true value for both the empirical Bayes approach and the relative scaling prior on $\tau$, but shows bimodality for other choices. The Bayesian \sql{} does not have a scale parameter $\sigma$ to worry about, and it concentrates near $\beta = 20$ for the half-Cauchy prior on $\tau$. 
+
+\begin{figure}[!ht]%
+\centering
+\includegraphics[width=0.9\columnwidth]{art/effect_of_sigma}%
+\caption{Behavior of the posterior density under different methods of handling the hyper-parameters $\sigma^2$ and $\tau$ for the Horseshoe prior as well as the Bayesian \sql{} for a half-Cauchy prior on its global shrinkage parameter. }%
+\label{fig:effect-sigma}%
+\end{figure}
+
+It should be epmphasized that the argument in the above example is not to establish the superiority of \sql{} over horseshoe, but rather to point out the importance of hyper-parameters in a Bayesian hierarchical model to scale to the unknown error variance. Admittedly, one can simply use an empirical Bayes approach to get rid of such undesired situations. However, the striking difference in the behaviour of the posterior densities in Fig. \ref{fig:effect-sigma} suggests that the scaling of global parameters is a delicate issue, likely to be pervasive in all global-local shrinakge prior. The Bayesian \sql{} escapes unharmed by its design to ignore $\sigma$. 
+
+
+\section{Adding a Global Component $ \sqrt{\text{DL}} $}
+
+The use of local shrinkage priors in sparse models and high dimensional data settings has been investigated thoroughly by several authors. For example \citep{castillo2015bayesian} , have proved that local shrinkage priors do not achieve posterior contraction around the true model. Moreover, in \cite{castillo2015bayesian} , the authors explained that from a Bayesian perspective, this lack of concentration property, renders these priors useless. They defend their point of view by saying that poor concentration around true model values yields dishonest Credible Intervals. Hence poor uncertainty quantification. In this section, we will try to incorporate a global component into our model in order to improve it's performance.
+
+In the hierarchical model given by \ref{sq_lasso_h}, we are placing the following prior on the regression coefficients. 
+\begin{equation} \label{Lasso_prior}
+\left.
+\begin{array}{cc}
+\beta_j & \stackrel{iid}{\sim} \NormRV(0 , \tau_j^2) \\
+\tau_j^2 & \stackrel{iid}{\sim} \mathcal{E}\mathrm{xp}(\lambda^2/2) 
+\end{array} \right \} \Rightarrow
+\bbeta \sim DE(\lambda) \text{ and } \lambda^2 \sim \pi \left(\lambda \right). 
+\end{equation}
+The above parametrization clearly shows the lack of a local parameter that could adjust with signal strength. In fact, Global-local shrinkage priors usually have the following Gaussian scale mixture representation: \[ \beta_j \stackrel{iid}{\sim} \NormRV(0 , \tau^2 \psi_j^2), \ \psi_j \sim f \mbox{ and} \ \tau \sim g, \] where $\tau$ is a global standard deviation parameter, controlling how large the $\beta_j$ parameters are in general (\rm{i.e.} a global shrinkage parameter ), while the local standard deviation parameters $\psi_j$ control how big the parameter is allowed to be locally.  The priors for $\tau$ and the $\psi_j$ are typically set to be independent.  Also some works just treats $\tau$ as fixed or tune it using Empirical Bayes procedures. A better parametrization  would constrain the $\psi_j$ to lie on a simplex.  This would then give us the interpretation that $\tau$ is the overall standard deviation if the covariates are properly scaled  and the local parameters control how the individual parameters contribute to this variability. The standard parameterisation leads to some confounding between the scales of the local and global parameters, which can lead to both an interpretational and computational problems.  Interesting Bhattacharya et al. showed that in some specific cases you can go from a model where the local parameters are constrained to the simplex to the unconstrained case.
+
+  Moreover, it is easy to see from \eqref{Lasso_prior} that the joint prior distribution of the parameter vector while easily tractable due to independence does not place sufficient prior mass on sparse regions, since the double exponential density is bounded at zero. Recent choices of priors were motivated by this basic assessment. For example, the horseshoe prior was carefully formulated to yield a spike at zero accounting for sparsity as well as heavy tail property in order to recover strong signals. Here however, we chose to follow the ideas of \citep{bhattacharya2014dirichlet}, and model the full joint prior distribution of $\bbeta$ on $\R^p$.
+
+In what follows let \rm{DE}$(\tau )$ denote a double exponential distribution where $\tau$ is the scale parameter, \rm{i.e.}  with density $f(x) = (2\tau)^{-1} \e^{-\abs{x}/ \tau }$. Also, we use the following form for the \rm{giG} generalized inverse gamma distribution: $Y\sim\text{\rm{giG}} \left(\lambda,\rho , \chi \right) \text{ if } f(y) \propto y^{\lambda - 1} \e^{-0.5 \left( \rho y + \chi /y \right) }  $ for $y > 0$.
+
+In \cite{bhattacharya2014dirichlet} proposed a completely different class of shrinkage priors. Instead of modeling the marginal distribution of the regression coefficients, they looked at the joint distribution. Recall that in \ref{Lasso_prior}, the joint prior distribution is $p$-dimensional \rm{DE} with a single global scale $\tau$. \cite{bhattacharya2014dirichlet} instead, introduced a vector of scales $\left( \phi_1 \tau , \ldots , \phi_p \tau \right)$, where $ \left( \phi_1 , \ldots , \phi_p \right) $ is constrained to lie in the $ (p - 1) $ dimensional simplex $\mathcal{S}^{n-1} = \{ \bphi = (\phi_1 , \ldots , \phi_p ) : \phi_j \geq 0, \ \sum_{j = 1}^{p} \phi_j = 1 \}$ and is assigned a \rm{Dir}$(a, \ldots ,a)$ prior. This prior choice under adequate values of $a$ helps force a large subset of $\bbeta$ to be simultaneously close to zero with high probability. The corresponding prior is hence :$$ \beta_j \mid \phi , \tau \sim \text{\rm{DE}}(\phi_j \tau), \, \bphi \sim \text{\rm{Dir}}(a, \ldots ,a), \ \tau \sim g, $$ and is referred to as a Dirichlet-Laplace prior on $\bbeta$, and denoted as $\bbeta \mid \tau \sim \text{\rm{DL}}_a(\tau)$.
+
+In \citep{bhattacharya2014dirichlet}, the authors extensively studied the marginal properties of $\beta_j \mid \tau$, integrating out $\bphi$. The following proposition summarizes their findings.
+
+\begin{proposition}\label{DL_prior_carac}
+If $\bbeta \mid \tau \sim \text{\rm{DL}}_a(\tau)$, then the marginal distribution of $\beta_j$ given $\tau$ is unbounded with a singularity at zero for any $a < 1$.
+\end{proposition}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=.6]{Priors}
+\caption{Marginal density of the $\text{\rm{DL}}_a$ with $a = 1/2$ in comparison to the Horseshoe, the Laplace prior induced by the Bayesian-$\sqrt{\text{Lasso}}$ and the Cauchy prior.}
+\label{fig_priors}
+\end{figure}
+
+This property ensures that the Dirichlet-Laplace prior places enough mass around sparse vectors. Furthermore Bhattacharya et al. claimed that $\tau$ plays a critical role in determining the tails of the marginal distribution of $\beta_j$'s. In a full Bayesian framework they recommend placing \rm{Gamma}$(pa ,1/2)$ prior on $\tau$. Furthermore, using the representation of the \rm{DE} distribution as a scale mixture of Gaussians: \[ \beta_j \mid \phi , \tau \sim \text{\rm{DE}}(\phi_j \tau) \Rightarrow \left\{ \begin{array}{ccc}
+\beta_j & \sim & \NormRV(0 , \psi_j\phi^2_j\tau^2); \\
+\psi & \sim & \mathcal{E}\mathrm{xp}(1/2),
+\end{array} \right. \] we get the augmented full hierarchical model :
+\begin{align} \label{sq_dl_h}
+[ \y \mid \bbeta, v^2 ] & \sim \NormRV(\X \bbeta, v^2 \I_n), \\
+[\bbeta \mid \bphi, \tau , \bpsi ] & \sim \NormRV(\0, D_{\bpsi \bphi \tau}), \quad D_{\bpsi \bphi \tau} = \text{Diag}(\psi\phi_1^2\tau^2, \ldots, \psi\phi_p^2\tau^2), \\
+\psi_j & \stackrel{iid}{\sim} \mathcal{E}\mathrm{xp}(1/2), \\
+\bphi & \sim \text{\rm{Dir}}(a, \ldots ,a), \\
+\frac{\tau}{v^2} & \sim \mathcal{G}\mathrm{amma}(pa , 1/2), \\
+%[\lambda_1^2, \ldots, \lambda_p^2 \mid \tau^2] & \sim \prod_{j=1}^{p} \sim \frac{\tau^2}{2} e^{-%\lambda_j^2\tau^2/2} \d \lambda_j^2, \quad \lambda_j^2 > 0, \\
+[v^2] & \sim \mathcal{G}\mathrm{amma}(\frac{n+1}{2} , 1/2).  
+%[\tau^2] & \sim p(\tau^2) d\tau^2,  \; \tau^2 > 0. \quad [ \tau^2 \sim \GammaRV(r, \delta), \text{ or } \tau^2 \sim \CauchyRV(0,1). ]
+\end{align}
+
+As we can see from Fig. \ref{fig_priors}, both the Horseshoe and the $\text{\rm{DL}}_a$ exhibit a singularity near zero. This marginal behavior at the origin guarantees sufficient prior mass near zero in order to accommodate for nearly black vectors. Furthermore, in the lower panel of Figure \ref{fig_priors}, we see a comparison of the tails of the different shrinkage priors. Unlike horseshoe and $\text{\rm{DL}}_a$, the Laplace prior does not have heavy tails that leave room for prior mass on possible high signal values. Hence we would expect the two former shrinkage priors to outperform the latter in both signal recovery and noise shrinkage. 
+
+\section{Posterior Computation}
+The above hierarchical model, exploits the Laplace Gaussian scale mixture and leads to straightforward posterior computations. To reduce autocorrelation, we rely on a blocked gibbs sampler scheme. The sampler moves from the following blocks \rm{(i)} $ [ \bbeta \mid \bpsi , \bphi , \tau , \v^2 , \y ] $, \rm{(ii)} $[\bpsi \mid \bphi , \tau , \bbeta]$, \rm{(iii)}   $[ \bphi \mid \bbeta]$, \rm{(iv)} $[ \tau \mid \bphi, \bbeta, v^2 ]$, and \rm{(v)} $[ v^2 \mid \bbeta ,\tau , \y ]  $. Computing the full conditional distribution of the above blocks is standard and straightforward due to conjugacy except for the third block $[ \bphi \mid \bbeta]$. In their paper \citet{bhattacharya2014dirichlet}, developed a very efficient sampling scheme for this non-trivial step. We state the following result from their paper, for a complete proof see \citep{bhattacharya2014dirichlet}.
+
+\begin{theorem}\label{dl_phi_post}
+The joint posterior of $[\bphi \mid \bbeta ]$ has the same distribution as $ \left( T_1/T, \ldots \T_p/T \right)$, where $T_j$'s are independently distributed according to a \rm{gIG}$a-1 , 1 , 2\abs{\beta_j}$, and $T = \sum_{j=1}^{p}T_j$. 
+\end{theorem}
+
+Using \ref{dl_phi_post}, we get the following blocked Gibbs sampler:
+\begin{itemize}
+\item[(i)] Sample $[ \bbeta \mid \bpsi , \bphi , \tau , \v^2 , \y ]$ from $\NormRV \left( \bSigma \X^T\y/v^2 , \bSigma \right)$, with $$ \bSigma^{-1} = \frac{\X\X^T}{v^2} + \frac{\D^{-1}_{\bpsi \bphi^2}}{\tau^2} $$.
+
+\item[(ii)]Conditional posterior of $[\bpsi \mid \bphi , \tau , \bbeta]$ can sampled in block  by independently drawing $ \psi_j \mid \phi_j , \tau , \beta_j $ from \rm{inv-Gaussian}$ (\frac{\phi_j\tau}{\abs{\beta_j}} ,1) $
+
+\item[(iii)] Sample the conditional posterior of $[ \bphi \mid \bbeta]$ by drawing $ \ T_1, \ldots \T_p$ independently from \rm{gIG}$a-1 , 1 , 2\abs{\beta_j}$ and set $\phi_j = T_j/T$, with $T = \sum_{j=1}^{p}T_j$.
+
+\item[(iv)] Sample $[ \tau \mid \bphi, \bbeta, v^2 ]$ from a \rm{gIG}$( pa-p , 1 , 2\sum^{p}_{j=1}\abs{\beta_j}/\phi_j )$ distribution.
+
+\item[(v)] Sample $[ v^2 \mid \bbeta ,\tau , \y ]  $ by drawing $ \frac{1}{\sigma^2} $ from \rm{inv-Gaussian}$ ( [ \norm{\y - \X\bbeta} + \tau ]^{-1} ,1) $.
+\end{itemize}
+
+\section{Effect of Hyper-parameters}
+
+
+Handling the treatment of hyper-parameters can prove to dramatically affect the performance of Bayesian  methods. For example in Figure \ref{fig:effect-sigma}, we showed how in a very simple setting the horseshoe estimator behaves very differently based on the method used to handle and estimate the global shrinkage parameter $\btau$. Whether to use Empirical Bayes, Full Bayes and relative scaling or not are question we should address and discuss.
+
+In addition, there has been a great amount of interest in the theoretical properties of the blocked Gibbs sampler and their convergence properties. In fact, Bayesian shrinkage methods almost all rely on a blocked Gibbs sampler scheme to explore the parameter spaces. \cite{Rajaratnam2017Gibbs} and \cite{Khare2014ergodicity} studied the performance of and properties of Gibbs samplers in the context   of Bayesian shrinkage for regression. While they proved geometric ergodicity, they  pointed out that more often than not the samples obtained from these samplers usually present high auto-correlation and the chain suffers from slow convergence, and proposed   ways to overcome these problems.
+
+\subsection{Computational Issues}
+
+As we have seen in the previous sections, the use of scale mixtures of normals to represent otherwise non-conjugate priors on the regression coefficients is a common feature of Bayesian shrinkage models. Usually, this data augmentation procedure leads to a three step Gibbs sampler to sample from the intractable joint posterior. A first step for the regression coefficients $\bbeta$, a second for the variance parameter $\bsigma$, and a last step for the augmented parameter (here we regroup the augmented as well as hyper-parameters of the model). Although, \cite{Khare2013blasso_ergodicity} and \cite{Khare2014ergodicity} proved geometric ergodicity of the three step Gibbs sampler for the Bayesian Lasso and the Dirichlet-Laplace prior. It has been pointed out in \cite{Rajaratnam2017Gibbs}, that convergence of these sampler can be rather slow specially in high-dimensional settings. Given that the \textit{"large $p$ small $n$"}, is precisely the setting where these methods are used to overcome model complexity, computational issues in such settings would present a problematic drawback. 
+
+To address this bottleneck, \cite{Rajaratnam2017Gibbs} rely on \textit{blocking} and \textit{collapsing}. A Gibbs sampler is said to be collapsed if the joint posterior is marginalized over one or more parameters to reduce sampling steps. This often increases convergence rate, but the new posterior might not be tractable and any gain would then be lost in a more complicated scheme. Blocking, requires grouping multiple parameters together and jointly sampling them in one step. Grouping highly correlated parameters, is generally expected to improve the convergence rate of the MCMC.
+
+In their paper, \cite{Rajaratnam2017Gibbs} consider the case of the Bayesian Lasso, where the prior distribution on the parameters is exactly the same as in \eqref{Lasso_prior}, except for the prior placed on the precision parameter. The hierarchical model is given by : 
+\begin{align}  \label{B-lasso_model}
+[\y \mid \bbeta, \bsigma^2] & \sim \NormRV(\X \bbeta, \bsigma^2 \I) \nonumber \\
+[\bbeta \mid \btau , \bsigma^2] & \sim \NormRV(\0, \bsigma^2 D_{\btau}), \quad D_{\btau} = \text{Diag}(\tau_1^2, \ldots, \tau_p^2) \nonumber \\
+[\tau_1^2, \ldots, \tau_p^2 \mid \lambda^2] & \sim \prod_{j=1}^{p} \sim \frac{\lambda^2}{2} e^{-\tau_j^2\lambda^2/2} \d \tau_j^2, \quad \tau_j^2 > 0, \\
+[\bsigma^2] & \sim \frac{1}{\bsigma^2} , \quad \bsigma^2 > 0, \nonumber  \\
+[\lambda^2] & \sim p(\lambda^2) d\lambda^2,  \; \lambda^2 > 0. \quad [ \lambda^2 \sim \GammaRV(r, \delta), \text{ or } \lambda^2 \sim \CauchyRV(0,1) ]. \nonumber
+\end{align}
+
+The corresponding Gibbs sampler is :
+
+\begin{align}  \label{B-lasso_gibbs}
+[\bbeta \mid \btau ,\by , \bsigma^2] & \sim \NormRV(\A_{\btau}^{-1}\X^{t}\y, \bsigma^2 \A_{\btau}^{-1}), \quad \text{where } \A_{\btau} = \X^{t}\X + \D_{\btau}^{-1} \nonumber \\
+[\frac{1}{\tau_j^2} \mid \bbeta ,\bsigma , \lambda^2] & \sim \rm{Inv-Gaussian}\left( \sqrt{\frac{\lambda^2\bsigma^2}{\beta_j^2}} , \lambda^2 \right) \\
+[\bsigma^2 \mid \y ,\bbeta ,\btau] & \sim \mathcal{IG}\left( \frac{n+p-1}{2} , \frac{\vectornorm{\y - \X \bbeta}^{2}_{2} + \bbeta^{t}\D^{-1}_{\btau}\bbeta}{2} \right) \nonumber 
+\end{align}
+
+The above three-step Gibbs sampler, while straight-forward and easy to implement, converges very slowly in high-dimensional settings. \cite{Rajaratnam2017Gibbs} demonstrated that this problem arises mainly due to the high a posteriori dependence between $\bbeta$ and $\bsigma^2$. And following this, they were able to group these parameters in one step through the following result. For the proof see \cite{Rajaratnam2017Gibbs}.
+
+\begin{lemma}\label{sigma_collapsed}
+In model \eqref{B-lasso_model} $[ \bsigma^2 \mid \y ,\btau ]$ has the inverse gamma distribution with shape $(n-1)/2$ and scale parameter $\y^{t}\left( \I_n - \X\A_{\btau}^{-1}\X^{t} \right)\y /2 $.
+\end{lemma}
+Using the above result they constructed a sampler in only two steps, first $(\bbeta , \bsigma^2) \mid  \btau$ and then $\btau \mid (\bbeta , \bsigma^2)$. The new collapsed Gibbs sampler is ergodic and as tractable as the original one. Convergence is considerably faster and they also observe low samples auto-correlation in their numerical comparisons.
+
+
+\subsection{Handling the global shrinkage parameter}
+
+%\ben
+%\item full bayes approach \cite{van2017adaptive} , $\tau$ prior choice $\Rightarrow$ near minimaxity
+As we have discussed in subsection 2.3.2 and particularly through the example borrowed from \cite{polson2010shrink} the dependence between $\btau \text{ and } \bsigma^{2}$ if not addressed properly might lead to unsatisfactory results. This problem, is expected to prevail in all global-local shrinkage priors, and in our case adding a global component to the model we observed the same behavior with absolute scaling.The golden rule here is to always scale global precision parameters. This is only one of the many questions that are often ignored, although greatly affect the performance of Bayesian hierarchical models. \cite{van2017adaptive} studied in depth the performance of the horseshoe prior and how different treatments for $\btau$ affect the theoretical properties of the estimators in the sparse normal means problem. They determined that the global shrinkage parameter $\btau$ is very important towards the minimax contraction rate. Also, \cite{van2014horseshoe} showed that $\btau$ can be interpreted as the proportion of non-zero parameters up to a logarithmic factor.
+
+In the full Bayes approach case, \cite{van2017adaptive} specified conditions under which the prior choice on $\btau$ results in near minimax contraction rate. Under their conditions, the prior must be truncated to the left by $1/p$ among other conditions. This led to a wide use of a truncated Cauchy distribution on this hyper-parameter. They also show that the posterior credible set are honest, in the sense that they concentrate around nearly black balls in case of a sparse normal means problem. One immediate application of this later result, is to use these sets not only as a tool of uncertainty quantification, but also an ad-hoc variable selection or hypothesis testing procedure. In fact, one could just look at the $(1-\alpha)$ \rm{CI} for each parameter and decide whether it's a signal or noise. They also point out that any non zero parameter has to exceed a certain threshold magnitude in order to be recovered. That is, for any $\beta \leq  \sqrt{ 2 \log(n/p_n) }$, where $\p_n$ is the number of true non-zero parameters, the \rm{CI} are not useful in a Bayesian sense.
+
+
+
+
+ Moreover, one could argue that with an emipirical Bayes procedure for the global shrinkage parameter, there would be no need to worry about scaling or hyper-prior distribution choice. However, as \cite{van2017adaptive} and \cite{datta2013asymptotic} point out, an empirical Bayes estimate of $\btau$ might possibly degenerate to zero, yielding improper parameter posterior distributions. This happens mostly when the model fails to identify the level of sparsity. With some conditions on sparsity level and signal magnitude, \cite{van2014horseshoe} and \cite{van2015conditions} showed the plug-in MMLE (Marginal Maximum Likelihood Estimate) of $\btau$ guarantees near minimax concentration rate. 
+ 
+ On the other hand, \cite{datta2013asymptotic} studied, the oracle properties of another decision rule. In their paper they considered the shrinkage weight $1 - \kappa_i(\btau) = \hat{\beta_i}(\btau)/\y_i $ and proved that this multiple testing rule is Bayes Optimal, under similar conditions to \cite{van2014horseshoe} in both a full Bayes or an empirical Bayes procedure on $\btau$. They also emphasize the risk of possible degeneracy of the empirical Bayes estimate.
+ 
+ 
+%\item MMLE empirical Bayes \cite{van2017adaptive} + \cite{polson2012half} + \cite{datta2013asymptotic} posible degeneracy of emp-bayes estimates
+%\item \cite{piironen2016hyperprior} strategy for choosing $\tau$ $m_eff$
+%\een
+
+%\subsection{Reversible Jump MCMC and the Bayesian Lasso}
+
+%\ben
+%\item problems with the naive gibbs sampler
+%\item rao-blackwellization of $\bsigma$
+%\een
+
+
+
+\chapter{Simulation Studies}
+
+In this chapter, we investigate the performance of the methods developed in Chapter 2. The goal is to test the finite sample properties of our methods and compare them with the common procedures available. First, we will start with the Normal Means problem, then we will look at the more complex scenario of high dimensional regression. In the later case, we study the effect of certain conditions on the design matrix that have been proven to affect model selection consistency in some methods.
+
+\section{Sparse Normal Means}
+
+In the normal means problem, the goal is usually to estimate a sparse vector $\btheta$ based on a vector $\Y = \left(Y_1, \ldots , Y_n \right) $ generated according to the model:
+\begin{equation}\label{normal_means}
+Y_i = \theta_i + \epsilon_i, \quad i = 1, \ldots, n.
+\end{equation}
+where $\epsilon_i$'s are independent standard normal variables and the means vector $\btheta$ is assumed to be sparse, that is most of its entries are zero. We want to recover the signals (non-zero) entries from the noise (zero means). This model has wide applications such as image reconstruction, multiple testing, and wavelet function estimation. 
+Furthermore, the sparse normal means model has been widely used as a test case for the behavior of sparsity methods, both in the Bayesian and frequentist paradigm. From a Bayesian point of view, we would like to recover the underlying mean vector and get some uncertainty quantification. 
+
+\begin{figure}[!ht]%
+\centering
+\includegraphics[width=\columnwidth]{art/sparse-means-sql-1}%
+\caption{Comparison of posterior mean estimates for two different sparse normal means, $\beta_i \sim 0.8 \delta_{\{7\}}+0.1\delta_{\{3\}}+0.1\delta_{\{0\}}$ and $\beta_i \sim 0.9 \delta_{\{7\}}+0.1\delta_{\{0\}}$ under the Bayesian $\sqrt{\text{Lasso}}$ . }%
+\label{fig:sql-sim-1}%
+\end{figure}
+
+The Bayesian square-root Lasso method described above has sharpened ability to detect signals in a sparse regime. We demonstrate the sparse signal recovery of the Bayesian $\sqrt{\text{Lasso}}$ through a simulation study for estimating a sparse normal mean vector for two different choices of $\bbeta$: 
+\ben
+\item $\bbeta = (\underbrace{7,\ldots,7}_{q_n=10},\overbrace{0,\ldots,0}^{n-q_n = 90})$ and 
+\item $\bbeta = (\underbrace{7,\ldots,7}_{q_{n}=10},\underbrace{3,\ldots,3}_{r_n=10}\overbrace{0,\ldots,0}^{n-q_n-r_n = 80})$.
+\een
+We generate observations from a Gaussian model $(y_i \mid \beta_i) \sim \NormRV(\beta_i, \sigma^2)$ for $\sigma^2 = 1$ and $\sigma^2 = \half$. Figure \ref{fig:sql-sim-1} shows the posterior mean estimates for the four possible scenarios described above. Clearly, the method recovers the signal entries of the mean vector, unless the signal strength is too weak and is thus lost among the noise and shrunk to zero.
+
+\section{High Dimensional regression}
+
+Another important area of application of shrinkage priors, is high dimensional regression and particularly model selection. In this section we generate our data following the linear regression model:
+$$ \y  = \X\bbeta + \bepsilon, \quad \text{with } \bepsilon \sim \NormRV(\0 , \sigma^2 \I_n ) $$
+where $\bbeta$ is a $p\times 1$ vector of model coefficients and is assumed to be sparse, $\y$ is an $n\times 1$ response vector, and $\bf X$ is an $n\times p$ design matrix. Hence some of the regression coefficients are exactly zero and they correspond to irrelevant predictors (columns of $\X$). In our simulations, we compare the performance of the Bayesian $\sqrt{\text{Lasso}}$, to the frequentist Lasso and the Horseshoe. In terms of penalized regression Lasso has been extensively studied and proven consistent under some conditions, also it is the most widely method in penalized regression. Likewise, the horseshoe prior has received much attention from Bayesian practitioners and has also been  proven to yield consistent results under mild assumptions. In comparing our methods with these two known and commonly used procedures, we will be able to judge their performances as well as notice their particular shortcomings and advantages. Moreover, simulation studies give a rather deep insight about the behavior of new methods, and allow us to investigate both favorable settings and scenarios where poor and unsatisfactory results arise. Often, it is with the study of these simulation that the first theoretical aspect are noticed, hence they give valuable directions and information both for theoretical and practical purposes.
+
+Recall that the advantage of $\sqrt{\text{Lasso}}$ is its ambivalence to the error variance $\bsigma^2$, and since our hierarchical model given by \eqref{eq:sqlasso} is but a representation of the $\sqrt{\text{Lasso}}$ penalty, we would expect our proposed Bayesian representation to work under large values of $\bsigma^2$, hence accommodating sub-gaussian errors and heavy tailed data.
+
+\subsection{Variable Selection for Shrinkage Priors  }\label{k-means}
+The problem of variable selection and particularly in a "\textit{small n, large p}" setting has received quite some attention both from  the frequentist an Bayesian perspective. The Lasse, $\sqrt{\text{\rm{Lasso}}}$, horseshoe, Dirichlet-Laplace and numerous other methods were in part developed to tackle this problem. While the frequentist methods usually yield a sparse estimate, that is the estimated $\hat{\bbeta}$ vector has entries that are exactly zero, their Bayesian counterparts always require a decision rule to classify an estimated coefficient as either zero or not. As we discussed in section \textbf{2.6.2}, decision rules for the horseshoe have already been studied, and shown to be optimal under some conditions for the normal means problem and regression settings where the design matrix is orthogonal. Likewise, for the Bayesian shrinkage priors considered in this work, we need a method to decide whether a coefficient should be classified as signal or noise. Such decision rule, can also be viewed as a variable selection step, given that any covariate for which the coefficient has been classified as zero is thrown out of the model. In this work, we decided to look at the posterior sample means of the $\hat{\bbeta}$ vector, and apply a k-means clustering on $\abs{\hat{\beta_j}} $ with only two cluster centers. We expect two clusters centers, one concentrated around zero for the noise signals and one away from zero. This method is motivated by the assumption that the true parameter vector is generated according to a two groups model. That is, each $\beta_i$ is generated from : 
+$$ \beta_i \sim \tfrac{q}{p} \delta_{A} + \tfrac{p-q}{p} \delta_{0}, \ \text{so that }  \bbeta = ( \underbrace{ A, \ldots ,A}_{q}, \overbrace{0, \ldots 0}^{p-q} ) $$
+
+After clustering the posterior mean vector, we classify the $\beta$'s according to the following steps : 
+\ben
+\item[1-] We look first at the two cluster centers $\left\lbrace \c_1 , \c_2 \right\rbrace $, and compare them in absolute value. Let $\C_s = max\left\lbrace \c_1 , \c_2 \right\rbrace$ and $\c_n = min\left\lbrace \c_1 , \c_2 \right\rbrace$. So that the $\c_s$ is the cluster center of the signals while $\c_n$ for the noise.
+\item[2-] For all $\hat{\beta_j}$, look at the corresponding cluster, if $\abs{\hat{\beta_j}} \in \c_n $, then $\hat{\beta}_j^{dec}= 0$. Otherwise, $\hat{\beta}_j^{dec} = \hat{\beta_j}$.
+\item[3-] Our final estimated coefficient vector is $\hat{\bbeta}^{dec} = \left\lbrace \hat{\beta}^{dec}_{j} \right\rbrace_{1\leq j \leq p}$.
+\een
+
+Clearly, unlike $\hat{\bbeta}$, which will never have exactly zero entries, the new $\hat{\bbeta}^{dec}$ given by the above described decision rule shrinks the noise coefficients to exactly zero, hence performing a variable selection.
+
+In this work, we stick to the case of the two groups model. However, the k-means method can be extended to a wider class of models. In fact, Li \rm{et. al} [2015], suggested a sequential 2-means clustering algorithm in case the model presents signals of varying strength level.
+
+One of the many interesting questions that arise with variable selection, is \textit{Model selection consistency}. This property essentially means that the method used consistently selects the true model. It should be emphasized that model selection consistency and estimator consistency are entirely two different properties. Recall that estimator consistency holds if and only if:\[ \hat{\bbeta}^{n} -  \bbeta \stackrel{\P}{\longrightarrow}0, \ \text{as } n\longrightarrow \infty,  \]
+while model selection consistency requires:
+\[ \P\left[ \lbrace i : \hat{\beta}_i^{n} \neq 0 \rbrace = \lbrace i : \beta_i \neq 0\rbrace \right] \longrightarrow 1, \ \text{as } n\longrightarrow \infty. \]
+Some authors have also considered sign consistency which is a stronger version of the later requirement, where not only the zeros have to be matched but also the sign of each component estimate. Also, an estimate with wrong signs could be misleading. 
+
+Characterizing a method model selection performance has proven to be a daunting task, since it is very hard to identify conditions that would guarantee or affect this property. However, in the case of the Lasso, properties which have received considerable attention, some authors have found that there a exist one simple necessary and sufficient condition for the Lasso to select the true model.
+
+\subsection{Effect of Irrepresentability Condition}
+
+
+The optimality properties of Lasso are well-known and they depend on "neighbourhood stability'' or "irrepresentability'' condition and ``beta-min'' condition. Informally, these conditions guarantee against ill-posed design matrix and separability of signal and noise parameters. We show here a small simulation study inspired from Zhao et al.[2006] to show that the effect of 'irrepresentability condition' is not as strong on our methods as it is on the Lasso.
+
+
+We describe the ``irrepresentable" condition below:\par Suppose, the sample covariance matrix is denoted by $\hat{\Sigma} = nX^T X$ and the active-set $S_0 = { j : \beta_j \neq 0}$ consists of first $s_0$ elements of $\beta$. One can partition the $\hat{\Sigma}$ matrix as
+
+$$ \hat{\Sigma} = \left(\begin{array}{cc}
+\hat{\Sigma}{s_0,s_0} & \hat{\Sigma}{s_0,p-s_0} \\ \hat{\Sigma}{p-s_0,s_0} & \hat{\Sigma}{p-s_0,p-s_0} \end{array} \right) $$
+
+where $\hat{\Sigma}_{s_0,s_0}$ is a $s_0\times s_0$ matrix corresponding to the active variables and so on. The irrepresentable condition for variable selection consistency of Lasso is:
+
+$$ || \hat{\Sigma}{p-s_0,s_0} \hat{\Sigma}{s_0,s_0}^{-1} sign(\beta_{S_0}) ||_{\infty} \leq \theta \quad \mbox{ for some } 0 < \theta < 1 .$$
+
+This condition is sufficient and almost necessary in the sense that the necessary condition is only slightly weaker than the sufficient condition. The necssary condition requires '$\leq 1$', while the sufficient condition involves $\leq \theta$ for some $0 < \theta < 1$. The irrepresentable condition fails to hold if the design matrix is too ill-posed, i.e. has multi-collinearity.
+
+\citep{buhlmann2011statistics} warn the readers that the irrepresentable condition may fail even though the design matrix is not ill-posed and it might restrict what can be done in high-dimensional problems. Zhao et al. (2006) provide numerical example to show the effect of the irrepresentable condition on the variable selection performance of Lasso. They showed that the probability of selecting the true sparse model is an increasing function of the irrepresentability condition number, defined as $$ \eta_{\infty} = 1 - || \hat{\Sigma}{p-s_0,s_0} \hat{\Sigma}{s_0,s_0}^{-1} sign(\beta_{S_0}) ||_{\infty} . $$ In particular, the probability of Lasso selecting the true model is almost 1 when $n_{\infty} > 0.2$ and it is almost zero when $\eta_{\infty} < -0.3$.
+
+We simulated data with $n = 100, p = 60$ and $q = 7$ with the sparse coefficient vector $\beta_{q}^* = (7,5,5,4,4,3,3)^T$, $\sigma^2$ was set to $5$ to allow for heavy tailed data. Like Zhao et al. (2006) we first draw the covariance matrix $\Sigma$ from $Wishart(p, I_p)$ and then generate design matrix $X$ from $N(0,\Sigma)$. This design is repeated a $100$ times, and at each iteration we apply the Lasso, horseshoe, Bayesian-$\sqrt{\text{Lasso}}$ and the $\sqrt{\text{\rm{DL}}}$ 100 times to each of the $100$ generated models. For the three Bayesian methods we run the Markov Chain for 9000 samples, discarding the first 1000 thousand as a burn-in step and finally thinning every two samples. We select the posterior median and then apply a variable selection step. For the horseshoe, we take advantage of the credible set properties and use them to classify the $\beta_j$'s. For the other two methods discussed in this work, we implement the k-means clustering procedure discussed in Subsection \ref{k-means}. The Lasso automatically yields sparse vector estimates, we only need to select the tuning parameter $\lambda$, which represents the penalty level, we set $\lambda$ to the value that minimizes the MSE based on a 10 fold cross validation.
+
+The goal of this simulation study is to observe the effect of the irrepresentability condition on our proposed methods and compare them to the Lasso and horseshoe. We are particularly interested in model selection consistency, so we look at the proportion of correctly selected models out of the 100 replicates for each design.
+
+Zhao et al. (2006) showed that the irrepresentability condition may not hold for such a design matrix. In fact, in our simulation studies the $\eta_\infty$'s for the 100 simulated designs were between $[-1.02, 0.36]$. We expect the Lasso to perform well when $\eta_\infty>0$ and poorly when $\eta_\infty<0$. We generate $n = 100$ design matrices and for each design, 100 simulations were conducted by generating the noise vector from $N(0, \sigma^2 I)$.
+
+Figure \ref{fig:profile:MSP_irrep} below shows the percentage of correctly selected model as a function of the irrepresentable condition number, $\eta_\infty$ for Lasso,the Horseshoe prior, the Bayesian-$\sqrt{\text{\rm{Lasso}}}$ and the $\sqrt{\text{\rm{DL}}}$.
+
+
+
+As expected, Lasso's variable selection performance is crucially dependent on the irrepresentability condition but the Horseshoe prior almost always recovers the true sparse $\beta$ vector irrespective of $\eta_\infty$. Strikingly, both our methods succeed in always recovering the true model. This strong performance independently of  $\eta_\infty$, clearly presents an advantage and is worth studying from a theoretical view point.
+
+\begin{figure}[ht!]%
+\centering
+\includegraphics[angle = 90 , origin = c , width=0.95\columnwidth , height =.45\textheight]{Irrep_model_selec_n100p60_q50_2groups}%
+\caption{Effect of Irrepresentability Condition on model selection }%
+\label{fig:profile:MSP_irrep}%
+\end{figure}
+
+Given that the values of the non-zero entries of the true $\bbeta$, do not differ much in magnitude, we think that this excellent performance in terms of variable selection, is in part due to the 2-means clustering procedure. 
+
+In figure \ref{fig:profile:MSE_irrep}, we see the evolution of the MSE calculated over the replicated samples for each design matrix. A surprising results, that we observe, is the pronounced difference from the model selection summary in figure \ref{fig:profile:MSP_irrep}. Note, however that the MSE computed here is for the posterior median before any decision rule has been applied. Since the Bayesian methods do not provide exact sparse estimates, there will be an added error component wise across the whole $\bbeta$ vector. Having a moderately large $p$, thus increases this error proportionally. Interestingly, the lasso despite not selecting the true model in approximately all designs, shows a very low MSE. This can be explained in part by the exact zero estimator yielded by this method, coupled with the sparse nature of the underlying true vector. Horseshoe, remarkably performs very well in terms of both true model selection and low MSE. Given that it is a Bayesian method, hence returning no exact zero entries, its impressive performance indicates both a very low bias for all components as well as small empirical variance of the posterior median.
+\begin{figure}[ht!]%
+\centering
+\includegraphics[angle = 90 , origin = c , width=0.95\columnwidth , height =.45\textheight]{Irrep_MSE_selec_n100p60_q50_2groups}%
+\caption{Effect of Irrepresentability on the MSE}%
+\label{fig:profile:MSE_irrep}%
+\end{figure}
+
+It is also important to note how this simulation study provides a clear separation and points out the difference between model selection consistency and estimation consistency. As pointed out in the beginning of this section, the two properties are different and somehow counter-intuitively none of them implies the other. In Fig. \ref{fig:profile:MSE_irrep} we see how lasso has very low MSE, which suggest estimator consistency, while Fig. \ref{fig:profile:MSP_irrep} clearly shows that lasso does not enjoy model selection consistency. Conversely, both \sql and \sqdl successfully capture the true model independently from $\eta_{\infty}$, but at the same time shows high values of MSE.
+
+
+%\subsection{Effect of Mutual Coherence Condition}
+
+\subsection{Adapting to Sparsity levels}
+
+Most penalized regression methods, and shrinkage priors operate under the assumption that the parameter of interest is sparse in some sense. In addition, the widespread attention that these methods have received in the past decade was mostly focused on theoretical properties in the case of sparse models. Although, sparsity or parsimony of statistical models is crucial for their proper interpretations, as in sciences
+and social sciences, we should address the cases where true coefficient vectors, have zero entries but are not completely sparse. Furthermore, the case of nearly black vectors has been investigated thoroughly, yet little attention has been given to adaptability to varying degrees of sparsity. In this section, we try to address this issue by running simulations on model designs with varying underlying levels of sparsity. Like the previous section, we will compare our methods to Lasso the gold standard for best subset selection of predictors, and the horseshoe prior which is a state-of-the-art Bayesian estimator for sparse signals. We will focus on misclassification probality and MSE as indicators of method performance. We limit ourselves to the case of two group generating model for model parameters. 
+
+We simulated data with $n = p = 100$, the design matrix $\X$ rows were simulated from a univariate normal distribution $\NormRV(0 ,2)$, the errors variance was set to $\bsigma^2 = 5 $. We sampled $100$ different design matrices, and for each of these design matrices, we applied the four different methods with varying degrees of sparsity. That is for each of the $100$ designs, say $\X$, we have nine different response vectors obeying the following equation:
+\beq\label{sparsity_mod}
+\y^{k} = \X \bbeta^{k} + \bepsilon, \ \text{where } \bbeta^{k} =  ( \underbrace{ 5, \ldots ,5}_{q = k\nicefrac{p}{10}}, \overbrace{0, \ldots 0}^{p-q} ) \ \text{for } k = 1,\ldots, 9 .
+\eeq
+
+Hence for each sparsity level, we have a $100$ replicates, from which we compute the misclassification proportion, that is the number of times a given method does not select the true model, and the MSE. Here we also compute for the Bayesian methods, the MSE after the decision rule was performed $\textbf{\rm{MSE}}(\hat{\bbeta}^{dec})$. 
+
+The below tables and graphs summarize the numerical results.
+
+
+\begin{table}[h!]
+\caption{Misclassification proportion \\ according to sparsity}\label{table:msp}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|}
+\cline{2-10}
+    & 0.1  &  0.2  &  0.3  &  0.4  &  0.5 &   0.6  &  0.7  &  0.8 &   0.9 	\\
+\hline
+\multicolumn{1}{|r|}{Lasso} &  0.2306 & 0.2786 & 0.2481 & 0.2250 & 0.2241 & 0.2225 & 0.2087 & 0.1829 & 0.1782	\\
+\hline
+\multicolumn{1}{|r|}{Horseshoe} &  0.0013 & 0.0041 & 0.0094 & 0.0077 & 0.0011 & 0.1015 & 0.5747 & 0.7140 & 0.8210\\
+\hline
+\multicolumn{1}{|r|}{B-\sql} & 0.0000 & 0.0006 & 0.0040 & 0.0201 & 0.0569 & 0.1261 & 0.2054 & 0.3124 & 0.4414 \\
+\hline
+\multicolumn{1}{|r|}{\sqdl} & 0.0000 & 0.0004 & 0.0008 & 0.0022 & 0.0043 & 0.0091 & 0.0134 & 0.0201 & 0.0577 \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{table}
+
+From table \ref{table:msp}, we see that Lasso never selects the true model, and on average misses $20 \% $ of the coefficients. The horseshoe does well when the sparsity  level is very low, this is well in accordance with the theoretical results for horseshoe's performance in the case of nearly black vectors. The Bayesian \sql, does almost as well as the horseshoe in terms of misclassification probability in the case of sparse parameters. However, both methods seem to breakdown when the proportion of non-zero parameters increases. The \sqdl escapes this problem and seems totally oblivious to sparsity level. This method almost pinpoints the true model in all cases. Figure \ref{fig:msp}, gives a better comparison than the above table, we can see clearly how the misclassification proportion for the horseshoe and Bayesian \sql are affected by sparsity levels, and how \sqdl adapts easily to that level. This suggests that the added global shrinkage parameter in \sqdl  successfully adapts to the sparsity level of the $\bbeta$ vector. 
+
+Likewise, from tables \ref{MSE} and \ref{MSE_dec}, we ca see how MSE for all four methods is affected by sparsity level. In the later table the MSE was computed after a classification step was applied to the original Bayesian estimates. Lasso and horseshoe have a better MSE in sparse settings. But their MSE drastically increases, whenever the number of non-zero parameters increases. The Bayesian-\sql, and the \sqdl have higher MSE values, however after classifying the parameters the MSE decreases significantly. 
+
+
+
+\begin{table}[h!]
+\caption{MSE according to sparsity\\ with decision rule}\label{MSE_dec}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|}
+\cline{2-10}
+    & 0.1  &  0.2  &  0.3  &  0.4  &  0.5 &   0.6  &  0.7  &  0.8 &   0.9 	\\
+\hline
+\multicolumn{1}{|r|}{Lasso} & 1.29 &  2.69 &  6.18 &  17.07 & 66.76 &  241.71 & 472.8 &  679.67 &  922.11	\\
+\hline
+\multicolumn{1}{|r|}{Horseshoe} &   0.33 & 0.95 &  2.31 &  3.83 &   5.27 &   268.69 & 1509.02 & 1883.04 & 2177.61 \\
+\hline
+\multicolumn{1}{|r|}{B-\sql} & 8.68 & 20.95 & 47.49 & 101.59 & 203.84 & 378.51 & 579.83 &  856.5 &   1193.86 \\
+\hline
+\multicolumn{1}{|r|}{\sqdl} &4.1 &  9.97 &  17.5 &  28.2 &   40.83 &  63.65 &  81.59 &   107.83 &  201.22 \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{table}
+
+\begin{figure}
+\centering
+\includegraphics[height = .37\textheight , width = .7\linewidth]{Sparsity_MSP_n=p}
+\caption{Misclassification proportion as a function of sparsity level.}
+\label{fig:msp}
+\end{figure}
+
+
+\begin{table}[h!]
+\caption{MSE according to sparsity}\label{MSE}
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|}
+\cline{2-10}
+    & 0.1  &  0.2  &  0.3  &  0.4  &  0.5 &   0.6  &  0.7  &  0.8 &   0.9 	\\
+\hline
+\multicolumn{1}{|r|}{Lasso} & 1.29 &  2.69 &  6.18 &  17.07 & 66.76 &  241.71 & 472.8 &  679.67 &  922.11	\\
+\hline
+\multicolumn{1}{|r|}{Horseshoe} &   0.5 &   1.49 &  3.55 &  5.56 &  6.96 &   90.73 &  782.25 & 1076.87 & 1313.92 \\
+\hline
+\multicolumn{1}{|r|}{B-\sql} & 10.74 & 26 &    54.59 & 92.16 & 149.51 & 223.96 & 298.3 &  387.07 &  481.41 \\
+\hline
+\multicolumn{1}{|r|}{\sqdl} & 27.63 & 35.65 & 42.76 & 50.06 & 58.48 &  69.78 &  76.6 &   84.56 &   91.42 \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{table}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[angle = 90, origin = c ,width=\linewidth , height = .78\textheight ]{Sparsity_MSE_high_n=p}\caption{A comparison of the MSE as a function of sparsity level}
+\label{fig:test}
+\end{figure}
+
+\begin{figure}[!h]%
+\centering
+\includegraphics[width=0.9\textwidth , height = .8\textheight]{Sparsity_Bsql}%
+\caption{Adapting to sparsity level Bsql }%
+%\label{fig:profile}%
+\end{figure}
+
+\begin{figure}[!h]%
+\centering
+\includegraphics[width=0.9\textwidth , height = .8\textheight]{Sparsity_DL_sq}%
+\caption{Adapting to sparsity level DLsq }%
+%\label{fig:profile}%
+\end{figure}
+
+
+
+
+
+
+
+
+%\chapter{Theoretical Results}
+
+\chapter{Discussion and Future Directions}
+
+
+
+%\ben
+
+%\item Summarize findings
+In this work, we first developed a Bayesian representation of the \sql, taking advantage of normal scale mixture representation of the Laplace prior, we were able to develop a Gibbs sampler for the parameters of the model. Numerical results showed satisfactory performance in the case of sparse normal means and high dimensional regression. Furthermore, unlike the horseshoe and other global local shrinkage priors, this method obviates the need to learn, scale or estimate the precision parameter $\sigma$. We also found that a k-means classification step on the posterior estimates of the parameter vector outperforms other decision rules like the use of credible intervals for horseshoe. 
+
+Motivated by the strong properties of global local shrinkage priors, specifically, their singularities at zero and their ability to concentrate at near minimax rate, we added a global component to our model. This ensured, that the new prior placed sufficient mass around the origin, thus a priori favoring nearly black sets, yet we did not observe any improvement in concentration coverage, as the MSE stayed quite high in our empirical investigation. Surprisingly, the effect of the added global parameter was a nice adaptability to sparsity levels. This new interesting property requires more theoretical investigation. 
+%\item Theoretical Justification for sparsity and dependence
+To show how the global parameter adapts to sparsity level, we conducted a small experiment, where models with different proportions of non-zero parameters were constructed, and we implemented both the \sqdl and the horseshoe. Here we are only interested in the effect of different sparsity levels on $\btau$. In Fig. \ref{fig:tau-hs}, we see how in the case of the horseshoe the boxplots for the $\btau$ samples continue to increase until we reach  level of approximately $.5$ where a dramatic breakdown happens. Clearly, in the left side of the figure, we can say that $\btau$ follows the monotone increase in the proportion of non-zero parameters, but when this proportion approaches and exceeds the $.5$ threshold, the method is no longer able to follow and adapt the sparsity level. This behavior also explains why the MSE and the proportion of misclassified $\beta$'s exploded whenever the proportion of non-zero $\beta$'s exceeded the threshold of $0.5$, as shown in Fig \ref{fig:msp} and Fig. \ref{fig:test}.
+\begin{figure}
+\centering
+\includegraphics[scale = .6]{Tau_hs}\caption{Evolution of $\btau$ on terms of sparsity level for the Horseshoe method}\label{fig:tau-hs}
+\end{figure}
+
+On the other hand, we also saw in Fig \ref{fig:msp} and Fig. \ref{fig:test}, how the \sqdl performance remained satisfactory and was in no way affected by changes in the sparsity level. The boxplots of $\btau$ samples in Fig. \ref{fig:tau-dl}, back up our conjecture, unlike the horseshoe, here the global shrinkage parameter follows and learns correctly the degree of sparsity. In the future, we would like to theoretically investigate this claim and try to prove it.
+
+
+\begin{figure}
+\centering
+\includegraphics[scale = .6]{Tau_dl}\caption{Evolution of $\btau$ on terms of sparsity level for the \sqdl method}\label{fig:tau-dl}
+\end{figure}
+
+%item extension to non gaussian likelihood \cite{datta2016bayesian}
+The methods developed in this work, only addressed the case where data can be modeled through a gaussian likelihood. While any continuous type response variable can be somehow transformed to fit this class, the same cannot be said of count or categorical type data. In \citep{datta2016bayesian}, the authors developed a new class of continuous local-global shrinkage priors tailored for
+sparse counts. One of the future aims of this work, is to extend our methods in order to accommodate discrete data structures. 
+%\item Factor/graphical model
+
+%\item thresholding procedure is bayes optimal for normal means, but not %applicable for regression.what k-means clustering.
+
+
+%\een
+%\vspace{-.15in}
+%\begin{enumerate}
+% The Bayesian \sql{} method will be investigated \textit{vis-a-vis} other G-L priors tailored for Gaussian data when the error distribution is heavy-tailed, e.g. $t$-distribution.
+%	\item  investigate the proposed method for sparse regime as well as default Bayes problems \citep{bhadra2015default}, numerically and theoretically.
+%	\item We will inquire if the proposed method can be extended to other penalty-prior duals to build new methods such as $\sqrt{\text{horseshoe}}$ that obviates learning $\sigma$ and yet has a non-convex penalty. 
+%\end{enumerate}
+% Introductory section or chapter.
+% An introduction is not required but very highly recommended. A
+% thesis consisting of reproduced published articles *must* include
+% a section titled "Introduction" separate from those articles:
+% \chapter{Introduction} or
+% \section{Introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Put the rest of the theses here. Several more sections %
+% (chapters) containing actual mathematics and proofs.   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% If you load a package that changes the behavior of citations and
+% bibliography formatting, the following two commands may be necessary
+% (and shouldn't hurt). Adjust the first fraction if the Grad School
+% hassles you about spacing between references.
+\singlespacing
+\setlength{\itemsep}{.75\baselineskip plus .2\baselineskip minus .1\baselineskip}
+% The reference section is required to be listed in the TOC, and an added
+% package may change that. If so the following may be needed just before
+% the bibliography:
+  \clearpage
+% \addcontentsline{toc}{section}{Bibliography}
+
+\bibliographystyle{plainnat}
+\bibliography{sqlassorefs,hs-review}
+
+
+% The closing "thebibliography" environment can be completely replaced
+% (if you use BibTeX) by
+% \bibliographstyle{plain}% for example, or amsplain or whatever.
+% \bibliography{nameoffile}% name of your .bib data file
+%
+%\begin{thebibliography}{99} % for example
+%\bibitem{BB1} % the citation key (used in citation commands: \cite{BB1})
+%  Brittan, Benjamin, \emph{The $3x-1$ problem}. \emph{J. of Trivial
+%  Results}, Vol. 2, (1989), 341--365.
+%
+%\bibitem{CL1}
+%  Custer, G. A. and Lipinsky, T. S., \emph{Sympathy for the deviate}.
+%  Trans. Amer. Math. Soc., vol. 100, (2004), 666--666.
+%
+%\end{thebibliography}
+\end{document}
