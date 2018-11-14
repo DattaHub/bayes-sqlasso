@@ -1,0 +1,228 @@
+\begin{thebibliography}{35}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Andrews and Mallows(1974)]{andrews_scale_1974}
+D.F. Andrews and C.L. Mallows.
+\newblock Scale mixtures of normal distributions.
+\newblock \emph{Journal of the Royal Statistical Society. Series B: Statistical
+  Methodology}, 36\penalty0 (1):\penalty0 99--102, 1974.
+\newblock ISSN 00359246.
+\newblock \doi{10.2307/2984774}.
+
+\bibitem[Armagan et~al.(2011)Armagan, Clyde, and
+  Dunson]{armagan2011generalized}
+Artin Armagan, Merlise Clyde, and David~B Dunson.
+\newblock Generalized beta mixtures of {{Gaussians}}.
+\newblock In \emph{Advances in {{Neural Information Processing Systems}}},
+  pages 523--531, 2011.
+
+\bibitem[Armagan et~al.(2013)Armagan, Dunson, and Lee]{armagan2013generalized}
+Artin Armagan, David~B Dunson, and Jaeyong Lee.
+\newblock Generalized double {{Pareto}} shrinkage.
+\newblock \emph{Statistica Sinica}, 23\penalty0 (1):\penalty0 119--143, 2013.
+
+\bibitem[Belloni et~al.(2011)Belloni, Chernozhukov, and
+  Wang]{belloni2011square}
+Alexandre Belloni, Victor Chernozhukov, and Lie Wang.
+\newblock Square-root lasso: Pivotal recovery of sparse signals via conic
+  programming.
+\newblock \emph{Biometrika}, 98\penalty0 (4):\penalty0 791--806, 2011.
+
+\bibitem[Bhadra et~al.(2016)Bhadra, Datta, Polson, and
+  Willard]{bhadra2015horseshoe+}
+Anindya Bhadra, Jyotishka Datta, Nicholas~G Polson, and Brandon Willard.
+\newblock The {{Horseshoe}}+ {{Estimator}} of {{Ultra}}-{{Sparse Signals}}.
+\newblock \emph{Bayesian Analysis}, to appear, 2016.
+
+\bibitem[Bhadra et~al.(2017)Bhadra, Datta, Polson, and
+  Willard]{bhadra2017horseshoe}
+Anindya Bhadra, Jyotishka Datta, Nicholas~G Polson, and Brandon Willard.
+\newblock Horseshoe {{Regularization}} for {{Feature Subset Selection}}.
+\newblock \emph{arXiv preprint arXiv:1702.07400}, 2017.
+
+\bibitem[Bhattacharya et~al.(2015)Bhattacharya, Pati, Pillai, and
+  Dunson]{bhattacharya2014dirichlet}
+Anirban Bhattacharya, Debdeep Pati, Natesh~S. Pillai, and David~B. Dunson.
+\newblock Dirichlet-{{Laplace}} priors for optimal shrinkage.
+\newblock \emph{Journal of the American Statistical Association}, 110:\penalty0
+  1479--1490, 2015.
+
+\bibitem[B{\"u}hlmann and {van de Geer}(2011)]{buhlmann2011statistics}
+Peter B{\"u}hlmann and Sara {van de Geer}.
+\newblock \emph{Statistics for High-Dimensional Data}.
+\newblock {Springer-Verlag Berlin Heidelberg}, 2011.
+
+\bibitem[Carvalho et~al.(2010)Carvalho, Polson, and
+  Scott]{carvalho2010horseshoe}
+Carlos~M Carvalho, Nicholas~G Polson, and James~G Scott.
+\newblock The horseshoe estimator for sparse signals.
+\newblock \emph{Biometrika}, 97:\penalty0 465--480, 2010.
+
+\bibitem[Castillo et~al.(2015)Castillo, Schmidt-Hieber, and {van der
+  Vaart}]{castillo2015bayesian}
+Ismail Castillo, Johannes Schmidt-Hieber, and Aad {van der Vaart}.
+\newblock Bayesian linear regression with sparse priors.
+\newblock \emph{The Annals of Statistics}, 43\penalty0 (5):\penalty0
+  1986--2018, October 2015.
+\newblock URL \url{http://dx.doi.org/10.1214/15-AOS1334}.
+
+\bibitem[Chatterjee and Lahiri(2011)]{chatterjee2011bootstrap}
+A.~Chatterjee and S.~N. Lahiri.
+\newblock Bootstrapping lasso estimators.
+\newblock \emph{Journal of the American Statistical Association}, 106\penalty0
+  (494):\penalty0 608--625, 2011.
+\newblock \doi{10.1198/jasa.2011.tm10159}.
+\newblock URL \url{http://dx.doi.org/10.1198/jasa.2011.tm10159}.
+
+\bibitem[Datta and Dunson(2016)]{datta2016bayesian}
+Jyotishka Datta and David~B Dunson.
+\newblock Bayesian inference on quasi-sparse count data.
+\newblock \emph{Biometrika}, 103\penalty0 (4):\penalty0 971--983, 2016.
+
+\bibitem[Datta and Ghosh(2013)]{datta2013asymptotic}
+Jyotishka Datta and Jayanta~K Ghosh.
+\newblock Asymptotic properties of {{Bayes}} risk for the horseshoe prior.
+\newblock \emph{Bayesian Analysis}, 8\penalty0 (1):\penalty0 111--132, 2013.
+
+\bibitem[Giraud(2014)]{giraud2014introduction}
+Christophe Giraud.
+\newblock \emph{Introduction to high-dimensional statistics}, volume 138.
+\newblock CRC Press, 2014.
+
+\bibitem[Giraud et~al.(2012)Giraud, Huet, Verzelen, et~al.]{giraud2012high}
+Christophe Giraud, Sylvie Huet, Nicolas Verzelen, et~al.
+\newblock High-dimensional regression with unknown variance.
+\newblock \emph{Statistical Science}, 27\penalty0 (4):\penalty0 500--518, 2012.
+
+\bibitem[Griffin and Brown(2010)]{griffin2005alternative}
+Jim~E Griffin and Philip~J Brown.
+\newblock Inference with normal-gamma prior distributions in regression
+  problems.
+\newblock \emph{Bayesian Analysis}, 5\penalty0 (1):\penalty0 171--188, 2010.
+
+\bibitem[Khare and Hobert(2013)]{Khare2013blasso_ergodicity}
+Kshitij Khare and James~P. Hobert.
+\newblock Geometric ergodicity of the bayesian lasso.
+\newblock \emph{Electronic Journal of Statistics}, 7:\penalty0 2150--2163,
+  2013.
+
+\bibitem[L{\'e}vy(1940)]{levy1940certains}
+Paul L{\'e}vy.
+\newblock Sur certains processus stochastiques homog{\`e}nes.
+\newblock \emph{Compositio mathematica}, 7:\penalty0 283--339, 1940.
+
+\bibitem[Li and Pati(2017)]{li2017variable}
+Hanning Li and Debdeep Pati.
+\newblock Variable selection using shrinkage priors.
+\newblock \emph{Computational Statistics \& Data Analysis}, 107:\penalty0
+  107--119, 2017.
+
+\bibitem[Mitchell and Beauchamp(1988)]{mitchell88}
+T.~J. Mitchell and J.~J. Beauchamp.
+\newblock Bayesian {{Variable Selection}} in {{Linear Regression}}.
+\newblock \emph{Journal of the American Statistical Association}, 83\penalty0
+  (404):\penalty0 1023--1032, December 1988.
+\newblock ISSN 01621459.
+\newblock URL \url{http://dx.doi.org/10.2307/2290129}.
+
+\bibitem[Pal and Khare(2014)]{Khare2014ergodicity}
+Subhadip Pal and Kshitij Khare.
+\newblock Geometric ergodicity for bayesian shrinkage models.
+\newblock \emph{Electronic Journal of Statistics}, 8\penalty0 (1):\penalty0
+  640--645, 2014.
+
+\bibitem[Park and Casella(2008)]{park_bayesian_2008}
+Trevor Park and George Casella.
+\newblock The bayesian lasso.
+\newblock \emph{Journal of the American Statistical Association}, 103\penalty0
+  (482):\penalty0 681--686, 2008.
+\newblock URL
+  \url{http://amstat.tandfonline.com/doi/abs/10.1198/016214508000000337}.
+
+\bibitem[Polson and Scott(2010)]{polson2010shrink}
+Nicholas~G Polson and James~G Scott.
+\newblock Shrink globally, act locally: Sparse {{Bayesian}} regularization and
+  prediction.
+\newblock \emph{Bayesian Statistics}, 9:\penalty0 501--538, 2010.
+
+\bibitem[Polson et~al.(2015)Polson, Scott, and Willard]{polson2015proximal}
+Nicholas~G Polson, James~G Scott, and Brandon~T Willard.
+\newblock Proximal algorithms in statistics and machine learning.
+\newblock \emph{Statistical Science}, 30\penalty0 (4):\penalty0 559--581, 2015.
+
+\bibitem[Rajaratnam et~al.(2017)Rajaratnam, Sparks, Khare, and
+  Zhang]{Rajaratnam2017Gibbs}
+Bala Rajaratnam, Doug Sparks, Kshitij Khare, and Liyuan Zhang.
+\newblock Scalable bayesian shrinkage and uncertainty quantification in
+  high-dimensional regression.
+\newblock 2017.
+
+\bibitem[Ro{\v{c}}kov{\'a} and George(2016)]{rovckova2016spike}
+Veronika Ro{\v{c}}kov{\'a} and Edward~I George.
+\newblock The spike-and-slab lasso.
+\newblock \emph{Journal of the American Statistical Association}, \penalty0
+  (just-accepted), 2016.
+
+\bibitem[Sun and Zhang(2012)]{sun2012scaled}
+Tingni Sun and Cun-Hui Zhang.
+\newblock Scaled sparse linear regression.
+\newblock \emph{Biometrika}, 99\penalty0 (4):\penalty0 879--898, 2012.
+
+\bibitem[Tang et~al.(2016)Tang, Xu, Ghosh, and Ghosh]{tang2016bayesian}
+Xueying Tang, Xiaofan Xu, Malay Ghosh, and Prasenjit Ghosh.
+\newblock Bayesian variable selection and estimation based on global-local
+  shrinkage priors.
+\newblock \emph{Sankhya A}, pages 1--32, 2016.
+
+\bibitem[Tibshirani(1996)]{tibshirani96}
+R.~Tibshirani.
+\newblock Regression {{Shrinkage}} and {{Selection}} via the {{Lasso}}.
+\newblock \emph{Journal of the Royal Statistical Society. Series B},
+  58:\penalty0 267--288, 1996.
+
+\bibitem[{van der Pas} et~al.(2014){van der Pas}, Kleijn, and {van der
+  Vaart}]{van2014horseshoe}
+SL~{van der Pas}, BJK Kleijn, and AW~{van der Vaart}.
+\newblock The horseshoe estimator: {{Posterior}} concentration around nearly
+  black vectors.
+\newblock \emph{Electronic Journal of Statistics}, 8:\penalty0 2585--2618,
+  2014.
+
+\bibitem[{van der Pas} et~al.(2016){van der Pas}, Salomond, and
+  Schmidt-Hieber]{van2015conditions}
+St{\'e}phanie {van der Pas}, Jean-Bernard Salomond, and Johannes
+  Schmidt-Hieber.
+\newblock Conditions for {{Posterior Contraction}} in the {{Sparse Normal Means
+  Problem}}.
+\newblock \emph{Electronic Journal of Statistics}, 10:\penalty0 976--1000,
+  2016.
+
+\bibitem[{van der Pas} et~al.(2017){van der Pas}, Szab{\'o}, der Vaart, and
+  {Aad}]{van2017adaptive}
+St{\'e}phanie {van der Pas}, Botond Szab{\'o}, van der Vaart, and {Aad}.
+\newblock Adaptive posterior contraction rates for the horseshoe.
+\newblock \emph{arXiv:1702.03698}, 2017.
+
+\bibitem[Zhang et~al.(2016)Zhang, Reich, and Bondell]{zhang2016high}
+Yan Zhang, Brian~J Reich, and Howard~D Bondell.
+\newblock High {{Dimensional Linear Regression}} via the {{R2}}-{{D2 Shrinkage
+  Prior}}.
+\newblock \emph{arXiv preprint arXiv:1609.00046}, 2016.
+
+\bibitem[Zhao and Yu(2006)]{zhao2006model}
+Peng Zhao and Bin Yu.
+\newblock On model selection consistency of lasso.
+\newblock \emph{Journal of Machine learning research}, 7\penalty0
+  (Nov):\penalty0 2541--2563, 2006.
+
+\bibitem[Zou and Hastie(2005)]{zou2005regularization}
+Hui Zou and Trevor Hastie.
+\newblock Regularization and variable selection via the elastic net.
+\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 67\penalty0 (2):\penalty0 301--320, 2005.
+
+\end{thebibliography}

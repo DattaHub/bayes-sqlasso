@@ -1,0 +1,16 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Proposed Methodology: Bayesian Square-root Lasso and Square-root DL}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Hierarchical Model for Bayes Lasso}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Adding a Global Component: \040Dirichlet\205Laplace}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Computation}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Gibbs Sampler for Dirichlet-Lasso }{section.3}% 6
+\BOOKMARK [1][-]{section.4}{Simulation Studies}{}% 7
+\BOOKMARK [2][-]{subsection.4.1}{Different Variable Selection Strategies}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.2}{Dependence on Error Variance }{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.3}{Effect of Irrepresentability Condition}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.4}{Adapting to Sparsity levels}{section.4}% 11
+\BOOKMARK [1][-]{section.5}{Discussion and Future Directions}{}% 12
+\BOOKMARK [1][-]{appendix.A}{Appendix: Handling Hyper-parameters}{}% 13
+\BOOKMARK [2][-]{subsection.A.1}{Computational Issues}{appendix.A}% 14
+\BOOKMARK [3][-]{section*.8}{Handling the global shrinkage parameter}{subsection.A.1}% 15
+\BOOKMARK [1][-]{section*.10}{References}{}% 16

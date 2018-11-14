@@ -1,0 +1,103 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: bayes-sql-fmt-1106.aux
+The style file: bib/ba.bst
+Database file #1: bib/sqlassorefs.bib
+Database file #2: hs-review.bib
+Repeated entry---line 297 of file hs-review.bib
+ : @article{park_bayesian_2008
+ :                            ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 323 of file hs-review.bib
+ : @book{buhlmann2011statistics
+ :                             ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 382 of file hs-review.bib
+ : @article{carvalho2010horseshoe
+ :                               ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 392 of file hs-review.bib
+ : @article{polson2010shrink
+ :                          ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 423 of file hs-review.bib
+ : @inproceedings{armagan2011generalized
+ :                                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 432 of file hs-review.bib
+ : @article{armagan2013generalized
+ :                                ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 443 of file hs-review.bib
+ : @article{griffin2005alternative
+ :                                ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 454 of file hs-review.bib
+ : @article{zhang2016high
+ :                       ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 473 of file hs-review.bib
+ : @article{castillo2015bayesian
+ :                              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 554 of file hs-review.bib
+ : @article{mitchell88
+ :                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 594 of file hs-review.bib
+ : @article{rovckova2016spike
+ :                           ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 603 of file hs-review.bib
+ : @article{tibshirani96
+ :                      ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 700 of file hs-review.bib
+ : @article{polson2015proximal
+ :                            ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 731 of file hs-review.bib
+ : @article{bhadra2015horseshoe+
+ :                              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 767 of file hs-review.bib
+ : @article{bhadra2017horseshoe
+ :                             ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 775 of file hs-review.bib
+ : @article{van2014horseshoe
+ :                          ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 785 of file hs-review.bib
+ : @article{van2015conditions
+ :                           ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 803 of file hs-review.bib
+ : @article{van2017adaptive
+ :                         ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 811 of file hs-review.bib
+ : @article{datta2013asymptotic
+ :                             ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 822 of file hs-review.bib
+ : @article{datta2016bayesian
+ :                           ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 860 of file hs-review.bib
+ : @article{bhattacharya2014dirichlet
+ :                                   ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 933 of file hs-review.bib
+ : @article{zou2005regularization
+ :                               ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 1277 of file hs-review.bib
+ : @article{belloni2011square
+ :                           ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 1288 of file hs-review.bib
+ : @article{sun2012scaled
+ :                       ,
+I'm skipping whatever remains of this entry
+Warning--empty journal in Rajaratnam2017Gibbs
+Warning--there's a number but no volume in rovckova2016spike
+(There were 24 error messages)
