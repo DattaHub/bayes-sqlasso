@@ -11,7 +11,7 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1710
+NormalPos.right=1687
 NormalPos.bottom=619
 Class=LaTeXView
 Document=ba-sample.tex
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1710
+NormalPos.right=1687
 NormalPos.bottom=619
 Class=LaTeXView
 Document=bayes-sql-fmt-1106.tex
 
 [Frame1_View0,0]
-TopLine=46
-Cursor=1688
+TopLine=417
+Cursor=12395
 
 [Frame2]
 Flags=0
@@ -47,7 +47,7 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1710
+NormalPos.right=1687
 NormalPos.bottom=619
 Class=LaTeXView
 Document=math-commandsB.tex
@@ -65,14 +65,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=32
-NormalPos.right=1710
+NormalPos.right=1687
 NormalPos.bottom=619
 Class=LaTeXView
 Document=bayes_sql_1105.tex
 
 [Frame3_View0,0]
-TopLine=86
-Cursor=2789
+TopLine=663
+Cursor=47018
 
 [SessionInfo]
 FrameCount=4

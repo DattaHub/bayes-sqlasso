@@ -111,12 +111,12 @@ Bayesian $\sqrt{\text{Lasso}}$ and \sqdl{}\thanksref{T1}}
 \thankstext{T1}{Manuscript date: November 10, 2018.}
 
 \begin{aug}
-\author{\fnms{Mohamed Abdelkader} \snm{Abba}\thanksref{addr1}\ead[label=e1]{mabba@ncsu.edu}},
+\author{\fnms{Mohamed A.} \snm{Abba}\thanksref{addr1}\ead[label=e1]{mabba@ncsu.edu}},
 \author{\fnms{Anindya} \snm{Bhadra}\thanksref{addr2,t1}\ead[label=e2]{bhadra@purdue.edu}},
 \author{\fnms{Jyotishka} \snm{Datta}\thanksref{addr3,t2}
 \ead[label=e3]{jd033@uark.edu}}
 \and
-\author{\fnms{Nicholas} \snm{Polson}\thanksref{addr4}
+\author{\fnms{Nicholas G.} \snm{Polson}\thanksref{addr4}
 \ead[label=e4]{ngp@chicagobooth.edu}}
 
 
@@ -214,18 +214,15 @@ The gold-standard for regularized method is Lasso that simultaneously performs e
 The Bayesian correspondence leads to uncertainty quantification by yielding standard error estimates and credible sets for the underlying parameters and automatic tuning of the penalty parameter using a full Bayes or empirical Bayes approach, avoiding any ad-hoc choice over a grid. However, convex penalties such as Lasso yield a posterior that is `useless for uncertainty quantification' \citep{castillo2015bayesian} and equivalent Bayesian hierarchical models are notably absent for the non-convex methods. 
 
 The popularity of global-local (G-L) shrinkage priors in the `nearly-black' or `ultra-sparse' regime, marked by parameter $\beta \in \ell_0[p_n]$, with $p_n \to 0$, is largely due their optimal theoretical and empirical performance. The key idea behind G-L priors is to use global shrinkage to adjust to the overall sparsity and local shrinkage to identify the strong signals. These priors avoid the computational bottle-neck of searching over an exponentially growing model space, which obstructs the spike-and-slab prior \citep{mitchell88} on ultra-high dimensions. For the sparse normal means model $(y_i \mid \beta_i)  \id \Nor (\beta_i,1)$ for $i = 1, \ldots, n$, the horseshoe prior \citep{carvalho2010horseshoe} is given by the hierarchical model: 
-
-\begin{align*}
-  (y_i \mid \beta_i) & \sim \Nor(\beta_i , \sigma^2), \;  (\beta_i \mid u_i, \tau) \sim 
+\[
+  (y_i \mid \beta_i) \sim \Nor(\beta_i , \sigma^2), \;  (\beta_i \mid u_i, \tau) \sim 
   \Nor(0, u_i^2 \tau^2), \; u_i ^2 \sim \operatorname{C}^{+}(0,1), \quad i = 1, \ldots, n. 
   %\label{eq:hs}
-\end{align*}
-
+\]
 Horseshoe prior operates by directly modeling the posterior inclusion probability $P(\beta_i \ne 0 \mid y_i)$ such that the probability concentrates near $0$ or $1$ for noise and signals, respectively. This follows from the linearity of posterior mean under the horseshoe prior that mimics a spike-and-slab model:
 \begin{equation}
 \E(\beta_i \mid y_i) = \{1- \E(\kappa_i \mid y_i)\}y_i \text{ where } \kappa_i = 1/(1+u_i^2 \tau^2) \label{eq:kappa}
 \end{equation}
-
 The $U$-shaped posterior is a direct outcome of putting a $\text{Be}(1/2,1/2)$ prior on the shrinkage coefficient $\kappa_i$, lending horseshoe its name. Since the inception of the horseshoe prior, many G-L priors have been proposed, focusing on the sparse normal means and regression problem. Some of the popular G-L priors include the Normal Exponential Gamma \citep{griffin2005alternative}, generalized double Pareto (GDP) \citep{armagan2013generalized}, the three-parameter beta \citep{armagan2011generalized}, the Dirichlet-Laplace \citep{bhattacharya2014dirichlet} and the more recent spike-and-slab Lasso \citep{rovckova2016spike}, horseshoe+ \citep{bhadra2015horseshoe+} and the R2-D2 \citep{zhang2016high} priors. 
 
 
@@ -262,16 +259,13 @@ The rest of the paper is organized as follows: \S \ref{ch:2} describes the Bayes
 
 %%%%%%%%% NEW section  
 
-\section{Proposed Methodology: Bayesian \texorpdfstring{$\sqrt{\text{Lasso}}$}{Square-root Lasso} and \texorpdfstring{$\sqrt{\text{\rm{DL}}}$}{Square-root DL}}\label{ch:2}
+\section{Proposed Methodology: Bayes \texorpdfstring{$\sqrt{\text{Lasso}}$}{Square-root Lasso} and \texorpdfstring{$\sqrt{\text{DL}}$}{Square-root DL}}\label{ch:2}
 \subsection{Hierarchical Model for Bayes \sql{}}
-Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text{Lasso}}$ in \eqref{eq:sqlasso}. Since the likelihood-prior decomposition of \eqref{eq:sqlasso} yield a Laplace density for both the observation and the prior model, we use a Gaussian scale mixture representation of Laplace to write the Bayesian hierarchy. The key steps in the Bayesian hierarchy for $\sqrt{\text{Lasso}}$ follows from the well-known identity due to \citet{levy1940certains} given by:
+Here we derive the Bayesian hierarchical model corresponding to the $\sqrt{\text{Lasso}}$ in \eqref{eq:sqlasso}. Since the likelihood-prior decomposition of \eqref{eq:sqlasso} yield a Laplace density for both the observation and the prior model, we use a Gaussian scale mixture representation of Laplace distribution \citep{andrews_scale_1974}, which itself follows from the well-known Levy identity \citep{levy1940certains}:
 \begin{equation}
   \int_{0}^{\infty} \frac{a}{(2 \pi)^{1/2} t^{3/2}} \exp\{-{a^2}/({2 t})\} \exp\{-\lambda t\} dt = \exp\{-a (2 \lambda)^{1/2} \} \;.\label{eq:levy}
 \end{equation}
-The Levy identity \eqref{eq:levy} leads to the  well-known normal scale mixture representation of Laplace density \citep{andrews_scale_1974}. Let $Q(\bbeta)= \norm{\y - \X \bbeta}_2^2$. Using $a = 1$, and $2\lambda = Q(\bbeta)$ yields:
-%\begin{equation}
-%\exp \left[-\{(\y - \X \bbeta)^{\T}(\y - \X \bbeta) \}^{1/2} \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \e^{-{1}/({2 t})} \e^{- \half Q(\bbeta) t} dt \label{eq:t_i}
-%\end{equation}
+Let $Q(\bbeta)= \norm{\y - \X \bbeta}_2^2$. Using $a = 1$, and $2\lambda = Q(\bbeta)$ yields:
 \beq
 \exp \left[-\vectornorm{Y - X\bbeta}_2 \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} t^{3/2}} \exp\{-{1}/({2 t})\} \exp\{-Q(\bbeta)t /2 \} dt \label{eq:t_i}
 \eeq
@@ -279,15 +273,15 @@ Alternatively, we can use $a = Q(\bbeta)$ and $\lambda = 1/2$ to obtain an equiv
 \begin{equation}
 \exp \left[-\vectornorm{Y - X\bbeta}_2 \right] = \int_{0}^{\infty} \frac{1}{(2 \pi)^{1/2} v} \exp\{-{v^2}/{2}\} \exp\{- \nicefrac{Q(\bbeta)}{2v^2}\} dv^2 \label{eq:v_i}
 \end{equation}
-To complete the hierarchy we use the normal scale mixture of Laplace prior on $\bbeta$  as follows:
+To complete the hierarchy we use the scale mixture representation \eqref{eq:levy} once more on $\bbeta$:
 \[
 \pi(\beta_i) \propto e^{-\tau \abs{\beta_i}} = \int_{0}^{\infty} \frac{1}{\sqrt{2\pi} \lambda_i} \e^{-\beta_i^2/(2\lambda_i^2)} \; \frac{\tau^2}{2} \e^{-\lambda_i^2\tau^2/2} \d \lambda_i^2, \quad i = 1, \ldots, p.
 \]
-The hyper-parameter $\tau$ serves the role of the tuning parameter in square-root Lasso. There are several different ways of treating $\tau$. We can treat it as a fixed tuning parameter and use pre-specified values on a grid to choose one.  We can also either estimate $\tau$ via an empirical Bayes marginal maximum likelihood or use a suitable hyperprior on $\tau$ to learn via full Bayes. For the Bayesian Lasso, \cite{park_bayesian_2008} used a Gamma hyper-prior to make the tuning parameter a part of the Gibbs sampler. 
+Here the hyper-parameter $\tau$ acts as a global shrinkage parameter. We can treat $\tau$ as a fixed tuning parameter or estimate $\tau$ via an empirical Bayes or full Bayes approach. For example, for Bayesian Lasso, \cite{park_bayesian_2008} used a Gamma hyper-prior to make the shrinkage parameter a part of the Gibbs sampler. 
 \beq
 \pi(\tau^2) = \frac{\delta^r}{\Gamma(r)} (\tau^2)^{r-1} e^{-\delta \tau^2}, \; \tau^2 > 0, \; (r >0, \delta >0).
 \eeq
-Under the scale-mixture decomposition \label{eq:v_i}, and the Gamma hyper-prior on $\tau^2$, the joint distribution of $y_i$ and all the hyperparameters in the model is :
+Under the scale-mixture decomposition \label{eq:v_i}, and the Gamma hyper-prior on $\tau^2$, the joint distribution of $y_i$ and all the hyperparameters in the model is:
 \begin{multline}
 f(\y, \bbeta, v^2, \blambda, \tau^2 \mid \r, \delta) \propto 
 \frac{1}{(2 \pi)^{1/2} v} \e^{-{v^2}/({2})} \exp\{- \half \nicefrac{\norm{\y - \X \bbeta}_2^2 }{v^2}\} \\
@@ -511,27 +505,27 @@ Some authors have also considered sign consistency which is a stronger version o
 %Characterizing a method model selection performance has proven to be a daunting task, since it is very hard to identify conditions that would guarantee or affect this property. However, in the case of the Lasso, properties which have received considerable attention, some authors have found that there a exist one simple necessary and sufficient condition for the Lasso to select the true model.
 
 
-\subsection{Dependence on Error Variance $\sigma$}
-
-The key advantage of \sql{}, as pointed out by its authors \citep{belloni2011square}, is its ambivalence towards the error variance $\sigma^2$, resulting in an invariant estimator. It seems that these advantages would carry over to the Bayesian hierarchy as well. We illustrate this feature with a toy example borrowed from \citet{polson2010shrink}, created to warn against ignoring the dependence between $\tau$ and $\sigma^2$. The original example in \citet{polson2010shrink} generated two observations with true mean $20$, and considered the posterior under two different prior choices $\tau \sim \CauchyRV^{+}(0,1)$ (absolute scaling) and $\tau \sim \CauchyRV^{+}(0,\sigma)$ (relative scaling) and showed that the posterior becomes bimodal under the absolute scaling prior. The authors argued that ``the issue is one of averaging over uncertainty about $\sigma$ in estimating the signal-to-noise ratio'' -- precisely what the \sql{} aims to protect from. 
-
-We recreate this example in Fig. \ref{fig:effect-sigma}, with four different choices for handling the hyper-parameters $\sigma^2$ and $\tau^2$: 
-\ben 
-\item $\tau \sim \CauchyRV^+(0,1)$ (absolute scaling), $\sigma \sim 1/\sigma^2$ (Jeffreys's). 
-\item $\tau \sim \CauchyRV^+(0,\sigma)$ (relative scaling), $\sigma \sim 1/\sigma^2$ (Jeffreys's). 
-\item $\tau$ fixed, $\sigma \sim 1/\sigma^2$ (Jeffreys's), and
-\item $\tau$, $\sigma$ fixed, 
-\een
-where, `fixed' hyperparameters are estimated using an Empirical Bayes approach. The final candidate is the Bayesian \sql{}, which is free of $\sigma$, and we put a standard half-Cauchy prior on its global shrinkage term $\tau^2$. Fig. \ref{fig:effect-sigma} shows the posterior mode of $p(\beta \mid y)$ for the five different candidates. As expected, the horseshoe posterior concentrates near the true value for both the empirical Bayes approach and the relative scaling prior on $\tau$, but shows bimodality for other choices. The Bayesian \sql{} does not have a scale parameter $\sigma$ to worry about, and it concentrates near $\beta = 20$ for the half-Cauchy prior on $\tau$. 
-
-\begin{figure}[!ht]%
-\centering
-\includegraphics[width=0.9\columnwidth]{art/effect_of_sigma}%
-\caption{Behavior of the posterior density under different methods of handling the hyper-parameters $\sigma^2$ and $\tau$ for the Horseshoe prior as well as the Bayesian \sql{} for a half-Cauchy prior on its global shrinkage parameter. }%
-\label{fig:effect-sigma}%
-\end{figure}
-
-It should be emphasized that the argument in the above example is not to establish the superiority of \sql{} over horseshoe, but rather to point out the importance of hyper-parameters in a Bayesian hierarchical model to scale to the unknown error variance. Admittedly, one can simply use an empirical Bayes approach to get rid of such undesired situations. However, the striking difference in the behaviour of the posterior densities in Fig. \ref{fig:effect-sigma} suggests that the scaling of global parameters is a delicate issue, likely to be pervasive in all global-local shrinakge prior. The Bayesian \sql{} escapes unharmed by its design to ignore $\sigma$. 
+%\subsection{Dependence on Error Variance $\sigma$}
+%
+%The key advantage of \sql{}, as pointed out by its authors \citep{belloni2011square}, is its ambivalence towards the error variance $\sigma^2$, resulting in an invariant estimator. It seems that these advantages would carry over to the Bayesian hierarchy as well. We illustrate this feature with a toy example borrowed from \citet{polson2010shrink}, created to warn against ignoring the dependence between $\tau$ and $\sigma^2$. The original example in \citet{polson2010shrink} generated two observations with true mean $20$, and considered the posterior under two different prior choices $\tau \sim \CauchyRV^{+}(0,1)$ (absolute scaling) and $\tau \sim \CauchyRV^{+}(0,\sigma)$ (relative scaling) and showed that the posterior becomes bimodal under the absolute scaling prior. The authors argued that ``the issue is one of averaging over uncertainty about $\sigma$ in estimating the signal-to-noise ratio'' -- precisely what the \sql{} aims to protect from. 
+%
+%We recreate this example in Fig. \ref{fig:effect-sigma}, with four different choices for handling the hyper-parameters $\sigma^2$ and $\tau^2$: 
+%\ben 
+%\item $\tau \sim \CauchyRV^+(0,1)$ (absolute scaling), $\sigma \sim 1/\sigma^2$ (Jeffreys's). 
+%\item $\tau \sim \CauchyRV^+(0,\sigma)$ (relative scaling), $\sigma \sim 1/\sigma^2$ (Jeffreys's). 
+%\item $\tau$ fixed, $\sigma \sim 1/\sigma^2$ (Jeffreys's), and
+%\item $\tau$, $\sigma$ fixed, 
+%\een
+%where, `fixed' hyperparameters are estimated using an Empirical Bayes approach. The final candidate is the Bayesian \sql{}, which is free of $\sigma$, and we put a standard half-Cauchy prior on its global shrinkage term $\tau^2$. Fig. \ref{fig:effect-sigma} shows the posterior mode of $p(\beta \mid y)$ for the five different candidates. As expected, the horseshoe posterior concentrates near the true value for both the empirical Bayes approach and the relative scaling prior on $\tau$, but shows bimodality for other choices. The Bayesian \sql{} does not have a scale parameter $\sigma$ to worry about, and it concentrates near $\beta = 20$ for the half-Cauchy prior on $\tau$. 
+%
+%\begin{figure}[!ht]%
+%\centering
+%\includegraphics[width=0.9\columnwidth]{art/effect_of_sigma}%
+%\caption{Behavior of the posterior density under different methods of handling the hyper-parameters $\sigma^2$ and $\tau$ for the Horseshoe prior as well as the Bayesian \sql{} for a half-Cauchy prior on its global shrinkage parameter. }%
+%\label{fig:effect-sigma}%
+%\end{figure}
+%
+%It should be emphasized that the argument in the above example is not to establish the superiority of \sql{} over horseshoe, but rather to point out the importance of hyper-parameters in a Bayesian hierarchical model to scale to the unknown error variance. Admittedly, one can simply use an empirical Bayes approach to get rid of such undesired situations. However, the striking difference in the behaviour of the posterior densities in Fig. \ref{fig:effect-sigma} suggests that the scaling of global parameters is a delicate issue, likely to be pervasive in all global-local shrinakge prior. The Bayesian \sql{} escapes unharmed by its design to ignore $\sigma$. 
 
 \subsection{Effect of Irrepresentability Condition}
 
