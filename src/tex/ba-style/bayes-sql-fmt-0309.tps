@@ -17,10 +17,13 @@ Class=LaTeXView
 Document=bayes-sql-fmt-0309.tex
 
 [Frame0_View0,0]
-TopLine=186
-Cursor=4505
+TopLine=144
+Cursor=5053
 
 [SessionInfo]
 FrameCount=1
 ActiveFrame=0
+
+[Bookmarks]
+bayes-sql-fmt-0309.tex=476 
 
